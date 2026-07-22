@@ -43,10 +43,6 @@
     'En una situación completamente cotidiana'
   ];
 
-  var EXAMPLE_CHALLENGE = { topic: 'Viajes', element: 'Un pato', context: 'En un ascensor' };
-  var EXAMPLE_WRITE_TEXT = 'En 2027, Lina va a cancelar un viaje a Italia porque un pato empezó a seguirla por toda la ciudad.';
-  var EXAMPLE_FINISHED_QUOTE = 'En 2026, Lina va a cancelar un viaje a Italia porque un pato empezó a perseguirla por toda la ciudad.';
-
   var STORAGE_KEY = 'generadorFuturosBorders';
   var TARGETS = ['Lina', 'Yo'];
 
@@ -66,7 +62,6 @@
     draftText: ''
   };
 
-  var exampleSelectedTarget = 'Yo';
   var isSaving = false;
   var pendingHomeAction = null;
   var isExportingImage = false;
@@ -412,38 +407,6 @@
     goToScreen(2);
   }
 
-  function goToExamplePersonScreen() {
-    var cards = $all('.option-card', document.getElementById('screen-3'));
-    var selected = cards.filter(function (c) { return c.dataset.exampleTarget === exampleSelectedTarget; })[0];
-    setRadioSelection(cards, selected);
-    goToScreen(3);
-  }
-
-  function goToExampleCarouselScreen() {
-    goToScreen(4);
-    var btn = document.getElementById('example-next-btn');
-    btn.disabled = true;
-    var container = document.getElementById('screen-4');
-    startCarouselAnimation(container, EXAMPLE_CHALLENGE, 'example-live', function () {
-      btn.disabled = false;
-    });
-  }
-
-  function goToExampleResultScreen() {
-    goToScreen(5);
-  }
-
-  function goToExampleWriteScreen() {
-    document.getElementById('example-write-text').textContent = EXAMPLE_WRITE_TEXT;
-    goToScreen(6);
-  }
-
-  function goToExampleFinishedScreen() {
-    document.getElementById('screen-7').querySelector('.quote-block').textContent =
-      '“' + EXAMPLE_FINISHED_QUOTE + '”';
-    goToScreen(7);
-  }
-
   function goToRealGameIntro() {
     goToScreen(8);
   }
@@ -590,7 +553,7 @@
 
   function requestHome() {
     var current = gameState.currentScreen;
-    var onboardingScreens = [2, 3, 4, 5, 6, 7, 8];
+    var onboardingScreens = [2, 8];
     var hasUnsavedDraft = current === 12 &&
       document.getElementById('prediction-input').value.trim().length > 0;
     var midRealRound = [9, 10, 11, 12, 14].indexOf(current) !== -1 && gameState.completedTargets.length < 2;
@@ -636,14 +599,6 @@
     });
 
     document.addEventListener('click', function (e) {
-      var exampleCard = e.target.closest('[data-example-target]');
-      if (exampleCard) {
-        exampleSelectedTarget = exampleCard.dataset.exampleTarget;
-        var cards = $all('.option-card', document.getElementById('screen-3'));
-        setRadioSelection(cards, exampleCard);
-        return;
-      }
-
       var realCard = e.target.closest('[data-real-target]');
       if (realCard) {
         selectRealTarget(realCard.dataset.realTarget, realCard);
@@ -656,11 +611,6 @@
 
       switch (action) {
         case 'start-onboarding': startOnboarding(); break;
-        case 'goto-screen-3': goToExamplePersonScreen(); break;
-        case 'goto-screen-4': goToExampleCarouselScreen(); break;
-        case 'goto-screen-5': goToExampleResultScreen(); break;
-        case 'goto-screen-6': goToExampleWriteScreen(); break;
-        case 'goto-screen-7': goToExampleFinishedScreen(); break;
         case 'goto-screen-8': goToRealGameIntro(); break;
         case 'start-real-game': startRealGame(); break;
         case 'confirm-real-target': confirmRealTarget(); break;

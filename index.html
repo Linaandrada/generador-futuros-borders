@@ -49,130 +49,6 @@
         </div>
       </div>
       <div class="button-bar">
-        <button class="btn btn-primary" data-action="goto-screen-3">Siguiente</button>
-      </div>
-    </section>
-
-    <!-- SCREEN 3: Ejemplo - selección de persona -->
-    <section class="screen" id="screen-3" data-screen="3" aria-label="Ejemplo: selección de persona" hidden>
-      <div class="screen-inner">
-        <header class="nav-row">
-          <span class="handle">@linaandrada</span>
-          <span class="logo">GDF<span class="logo-accent">borders</span></span>
-        </header>
-        <button class="back-link" data-action="request-home">&larr; Volver al inicio</button>
-        <h1 class="title-md">Así funciona un desafío</h1>
-        <p class="subtitle">Seleccioná una persona</p>
-        <div class="option-list" role="radiogroup" aria-label="Seleccioná una persona">
-          <button type="button" class="option-card option-lina" data-example-target="Lina" role="radio" aria-checked="false">
-            <span class="checkbox" aria-hidden="true"></span>
-            <span class="option-text"><strong>Lina</strong><br>Imaginar el futuro de otra persona</span>
-          </button>
-          <button type="button" class="option-card option-yo is-selected" data-example-target="Yo" role="radio" aria-checked="true">
-            <span class="checkbox" aria-hidden="true">✓</span>
-            <span class="option-text"><strong>Yo</strong><br>Imaginar mi propio futuro</span>
-          </button>
-        </div>
-      </div>
-      <div class="button-bar">
-        <button class="btn btn-primary" data-action="goto-screen-4">Siguiente</button>
-      </div>
-    </section>
-
-    <!-- SCREEN 4: Ejemplo - generación del desafío -->
-    <section class="screen theme-bg-lina" id="screen-4" data-screen="4" aria-label="Ejemplo: generación del desafío" hidden>
-      <div class="screen-inner">
-        <header class="nav-row">
-          <span class="handle">@linaandrada</span>
-          <span class="logo">GDF<span class="logo-accent">borders</span></span>
-        </header>
-        <button class="back-link" data-action="request-home">&larr; Volver al inicio</button>
-        <h1 class="title-md">Así funciona un desafío</h1>
-        <p class="subtitle">Veamos qué futuro te toca imaginar</p>
-        <div class="carousel-group" id="example-carousels">
-          <div class="carousel-box carousel-topic">
-            <p class="carousel-label">Buscando un tema…</p>
-            <div class="carousel-viewport"><div class="carousel-track" data-track="topic"></div></div>
-          </div>
-          <div class="carousel-box carousel-element">
-            <p class="carousel-label">Debe incluir</p>
-            <div class="carousel-viewport"><div class="carousel-track" data-track="element"></div></div>
-          </div>
-          <div class="carousel-box carousel-context">
-            <p class="carousel-label">Tiene que pasar</p>
-            <div class="carousel-viewport"><div class="carousel-track" data-track="context"></div></div>
-          </div>
-        </div>
-        <p class="sr-only" aria-live="polite" id="example-live"></p>
-      </div>
-      <div class="button-bar">
-        <button class="btn btn-primary" data-action="goto-screen-5" id="example-next-btn" disabled>Siguiente</button>
-      </div>
-    </section>
-
-    <!-- SCREEN 5: Ejemplo - resultado del desafío -->
-    <section class="screen theme-bg-lina" id="screen-5" data-screen="5" aria-label="Ejemplo: resultado del desafío" hidden>
-      <div class="screen-inner">
-        <header class="nav-row">
-          <span class="handle">@linaandrada</span>
-          <span class="logo">GDF<span class="logo-accent">borders</span></span>
-        </header>
-        <button class="back-link" data-action="request-home">&larr; Volver al inicio</button>
-        <h1 class="title-md">Tu desafío</h1>
-        <div class="challenge-card-wrap">
-          <div class="challenge-card">
-            <p class="challenge-label">Tema</p>
-            <p class="challenge-value">Viajes</p>
-            <p class="challenge-label">Debe incluir</p>
-            <p class="challenge-value">Un pato</p>
-            <p class="challenge-label">Tiene que pasar</p>
-            <p class="challenge-value">En un ascensor</p>
-          </div>
-        </div>
-      </div>
-      <div class="button-bar">
-        <button class="btn btn-primary" data-action="goto-screen-6">Siguiente</button>
-      </div>
-    </section>
-
-    <!-- SCREEN 6: Ejemplo - escritura -->
-    <section class="screen theme-bg-lina" id="screen-6" data-screen="6" aria-label="Ejemplo: escritura" hidden>
-      <div class="screen-inner">
-        <header class="nav-row">
-          <span class="handle">@linaandrada</span>
-          <span class="logo">GDF<span class="logo-accent">borders</span></span>
-        </header>
-        <button class="back-link" data-action="request-home">&larr; Volver al inicio</button>
-        <h1 class="title-md">Así funciona un desafío</h1>
-        <p class="subtitle">Veamos qué futuro te toca imaginar</p>
-        <div class="chip-row">
-          <span class="chip chip-topic">Viajes</span>
-          <span class="chip chip-element">Un pato</span>
-          <span class="chip chip-context">En un ascensor</span>
-        </div>
-        <div class="note-card">
-          <p class="note-header">Predicción</p>
-          <p class="note-text" id="example-write-text"></p>
-        </div>
-      </div>
-      <div class="button-bar">
-        <button class="btn btn-primary" data-action="goto-screen-7">Siguiente</button>
-      </div>
-    </section>
-
-    <!-- SCREEN 7: Ejemplo - predicción terminada -->
-    <section class="screen theme-flat-lina" id="screen-7" data-screen="7" aria-label="Ejemplo: predicción terminada" hidden>
-      <div class="screen-inner">
-        <header class="nav-row">
-          <span class="handle">@linaandrada</span>
-          <span class="logo">GDF<span class="logo-accent">borders</span></span>
-        </header>
-        <p class="quote-block">&ldquo;En 2026, Lina va a cancelar un viaje a Italia porque un pato empezó a perseguirla por toda la ciudad&rdquo;</p>
-        <div class="dino-center">
-          <img src="assets/images/dino-pensando.png" alt="Dinosaurio pensando, apoyado sobre el codo" onerror="this.onerror=null;this.src='assets/images/placeholder.svg'">
-        </div>
-      </div>
-      <div class="button-bar">
         <button class="btn btn-primary" data-action="goto-screen-8">Siguiente</button>
       </div>
     </section>
@@ -331,7 +207,7 @@
         </header>
         <button class="back-link" data-action="request-home">&larr; Volver al inicio</button>
         <h1 class="title-center">¡Listo!</h1>
-        <p class="center-text">Ya escribiste la primera.<br>Ahora hacé una para vos.</p>
+        <p class="center-text">Ya escribiste la primera.<br>Ahora vamos por la segunda.</p>
         <div class="dino-center">
           <img src="assets/images/dino-lentes.png" alt="Dinosaurio con lentes de sol, abrigo y un pato en brazos" onerror="this.onerror=null;this.src='assets/images/placeholder.svg'">
         </div>
