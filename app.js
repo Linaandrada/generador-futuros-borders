@@ -5,43 +5,126 @@
      DATA
   ========================================================= */
 
-  var topics = [
-    'Viajes', 'Trabajo', 'Amor', 'Amistad', 'Familia', 'Dinero', 'Tecnología',
-    'Mascotas', 'Comida', 'Estudios', 'Vacaciones', 'Mudanza', 'Fama', 'Compras',
-    'Redes sociales', 'Hobbies', 'Deportes', 'Música', 'Cine', 'Emprendimientos',
-    'Inventos', 'Descubrimientos', 'Casa', 'Vecinos', 'Transporte', 'Cumpleaños',
-    'Moda', 'Salud', 'Sueños', 'Obsesiones', 'Superpoderes', 'Vida cotidiana',
-    'Internet', 'Inteligencia artificial', 'Futuro laboral', 'Relaciones',
-    'Nuevas habilidades', 'Decisiones extrañas', 'Éxito inesperado', 'Fracaso absurdo'
+  /* Cada ítem: { t: texto, f: familia }. La familia evita que
+     tema y contexto queden de la misma familia (frase plana). */
+  var TOPICS = [
+    { t: 'Su ex',                                f: 'amor' },
+    { t: 'El grupo de WhatsApp de la familia',   f: 'familia' },
+    { t: 'Su jefe',                              f: 'trabajo' },
+    { t: 'Su terapeuta',                         f: 'cuerpo' },
+    { t: 'Mudarse',                              f: 'casa' },
+    { t: 'Su cuenta bancaria',                   f: 'plata' },
+    { t: 'Sus vecinos',                          f: 'casa' },
+    { t: 'Una entrevista de trabajo',            f: 'trabajo' },
+    { t: 'El gimnasio',                          f: 'cuerpo' },
+    { t: 'Un casamiento ajeno',                  f: 'social' },
+    { t: 'Su tatuaje',                           f: 'cuerpo' },
+    { t: 'Su heladera',                          f: 'casa' },
+    { t: 'Aprender un idioma',                   f: 'ocio' },
+    { t: 'Su corte de pelo',                     f: 'cuerpo' },
+    { t: 'Una cita a ciegas',                    f: 'amor' },
+    { t: 'El asado familiar',                    f: 'familia' },
+    { t: 'Su primer sueldo grande',              f: 'plata' },
+    { t: 'Un emprendimiento',                    f: 'trabajo' },
+    { t: 'Su perfil de LinkedIn',                f: 'trabajo' },
+    { t: 'Una herencia inesperada',              f: 'plata' },
+    { t: 'Su horóscopo',                         f: 'ocio' },
+    { t: 'Su playlist',                          f: 'ocio' },
+    { t: 'Un examen',                            f: 'trabajo' },
+    { t: 'Su casa nueva',                        f: 'casa' },
+    { t: 'Un vuelo con escala',                  f: 'viaje' },
+    { t: 'Su celular',                           f: 'tech' },
+    { t: 'Su cuenta de Instagram',               f: 'tech' },
+    { t: 'Un préstamo',                          f: 'plata' },
+    { t: 'La lista de invitados',                f: 'social' },
+    { t: 'Su documento vencido',                 f: 'tramite' },
+    { t: 'Un grupo de amigos del secundario',    f: 'social' },
+    { t: 'Su plan de vacaciones',                f: 'viaje' }
   ];
 
-  var requiredElements = [
-    'Un pato', 'Una pizza', 'Un robot', 'Un dinosaurio', 'Una media perdida',
-    'Un cactus', 'Una paloma', 'Un extraterrestre', 'Un glitter', 'Una tostadora',
-    'Un perro', 'Un gato', 'Una planta', 'Un fantasma', 'Un meteorito',
-    'Una bicicleta', 'Un paraguas', 'Un disfraz', 'Una llamada inesperada',
-    'Un mensaje enviado por error', 'Una canción', 'Un helado', 'Una celebridad',
-    'Una abuela', 'Un vecino', 'Un insecto', 'Una valija', 'Una alarma',
-    'Un espejo', 'Una llave', 'Una foto vieja', 'Un objeto inútil',
-    'Una compra impulsiva', 'Una aplicación desconocida', 'Una discusión ridícula',
-    'Un regalo inexplicable', 'Una confusión', 'Una mascota ajena',
-    'Un tutorial de internet', 'Una máquina absurda'
+  /* El intruso absurdo. Familia 'none': no compite con nada. */
+  var ELEMENTS = [
+    { t: 'Un pato',                              f: 'none' },
+    { t: 'Un cactus con nombre propio',          f: 'none' },
+    { t: 'Una media perdida',                    f: 'none' },
+    { t: 'Un mensaje enviado por error',         f: 'none' },
+    { t: 'Una tostadora',                        f: 'none' },
+    { t: 'Glitter',                              f: 'none' },
+    { t: 'Un extraterrestre muy educado',        f: 'none' },
+    { t: 'Un dinosaurio inflable',               f: 'none' },
+    { t: 'Una paloma con actitud',                f: 'none' },
+    { t: 'Un regalo inexplicable',               f: 'none' },
+    { t: 'Una peluca',                           f: 'none' },
+    { t: 'Un audio de catorce minutos',          f: 'none' },
+    { t: 'Un fantasma tímido',                   f: 'none' },
+    { t: 'Un disfraz de gallina',                f: 'none' },
+    { t: 'Una máquina que no sirve para nada',   f: 'none' },
+    { t: 'Un tutorial mal traducido',            f: 'none' },
+    { t: 'Una piñata',                           f: 'none' },
+    { t: 'Un robot doméstico resentido',         f: 'none' },
+    { t: 'Un meteorito muy chiquito',            f: 'none' },
+    { t: 'Una mascota ajena',                    f: 'none' },
+    { t: 'Un contrato firmado sin leer',         f: 'none' },
+    { t: 'Una llave que no abre nada',           f: 'none' },
+    { t: 'Un tupper que nadie reclama',          f: 'none' },
+    { t: 'Una bufanda tejida a mano',            f: 'none' },
+    { t: 'Un caracol',                           f: 'none' },
+    { t: 'Un espejo que responde tarde',         f: 'none' },
+    { t: 'Una alarma que suena sola',            f: 'none' },
+    { t: 'Un carrito de supermercado',           f: 'none' },
+    { t: 'Una carta que llegó veinte años tarde',f: 'none' },
+    { t: 'Un sombrero enorme',                   f: 'none' },
+    { t: 'Una planta que se mueve sola',         f: 'none' },
+    { t: 'Un trofeo de algo que nadie ganó',     f: 'none' }
   ];
 
-  var contexts = [
-    'En un ascensor', 'En la playa', 'Durante una boda', 'En un aeropuerto',
-    'En otro país', 'En un supermercado', 'En una videollamada', 'En una fiesta',
-    'Durante un apagón', 'En un recital', 'En una entrevista laboral', 'En una cita',
-    'En una reunión familiar', 'En una estación de tren', 'En un hospital',
-    'En una clase', 'En una oficina', 'Durante unas vacaciones', 'En la montaña',
-    'En un baño público', 'En una fila', 'En un taxi', 'Durante una mudanza',
-    'En una plaza', 'En un restaurante', 'En un museo', 'En un cumpleaños',
-    'En una aplicación de citas', 'En una entrega de premios', 'En medio de una tormenta',
-    'Durante un viaje', 'En una casa desconocida', 'En una reunión de trabajo',
-    'Durante una transmisión en vivo', 'En una tienda', 'En una terraza',
-    'En un karaoke', 'En un parque', 'En un hotel',
-    'En una situación completamente cotidiana'
+  /* Siempre un lugar cotidiano y concreto, tiene que caber en
+     una foto. Se evitan hospitales/velatorios y similares. */
+  var CONTEXTS = [
+    { t: 'En un ascensor',                       f: 'casa' },
+    { t: 'En la fila del supermercado',          f: 'social' },
+    { t: 'En un casamiento',                     f: 'social' },
+    { t: 'En una videollamada de trabajo',       f: 'trabajo' },
+    { t: 'En un cumpleaños infantil',            f: 'social' },
+    { t: 'En un baño público',                   f: 'social' },
+    { t: 'En un taxi',                           f: 'viaje' },
+    { t: 'Durante un apagón',                    f: 'casa' },
+    { t: 'En una sala de espera',                f: 'tramite' },
+    { t: 'En el vestuario del gimnasio',         f: 'cuerpo' },
+    { t: 'En un aeropuerto a las cinco de la mañana', f: 'viaje' },
+    { t: 'En un asado',                          f: 'familia' },
+    { t: 'En una reunión de consorcio',          f: 'casa' },
+    { t: 'En un karaoke',                        f: 'ocio' },
+    { t: 'En la puerta de un cajero',            f: 'plata' },
+    { t: 'En plena mudanza',                     f: 'casa' },
+    { t: 'En un colectivo lleno',                f: 'viaje' },
+    { t: 'En una terraza',                       f: 'ocio' },
+    { t: 'En un probador de ropa',               f: 'cuerpo' },
+    { t: 'En un hotel barato',                   f: 'viaje' },
+    { t: 'En un examen de manejo',               f: 'tramite' },
+    { t: 'En la playa en temporada baja',        f: 'viaje' },
+    { t: 'En una peluquería',                    f: 'cuerpo' },
+    { t: 'En un shopping que está cerrando',     f: 'social' },
+    { t: 'En una fiesta que ya terminó',         f: 'social' },
+    { t: 'En un estacionamiento',                f: 'viaje' },
+    { t: 'En una clase de yoga',                 f: 'cuerpo' },
+    { t: 'En la cola del banco',                 f: 'plata' },
+    { t: 'En una cena familiar',                 f: 'familia' },
+    { t: 'En un locutorio',                      f: 'tramite' },
+    { t: 'En el fondo de un grupo de WhatsApp',  f: 'tech' },
+    { t: 'En una entrega de premios',            f: 'social' }
   ];
+
+  /* Arrays planos de texto para el carrusel (runCarousel espera strings). */
+  function textsOf(list) {
+    var out = [];
+    for (var i = 0; i < list.length; i++) out.push(list[i].t);
+    return out;
+  }
+
+  var topics = textsOf(TOPICS);
+  var requiredElements = textsOf(ELEMENTS);
+  var contexts = textsOf(CONTEXTS);
 
   var STORAGE_KEY = 'generadorFuturosBorders';
   var TARGETS = ['Lina', 'Yo'];
@@ -56,10 +139,10 @@
     currentTarget: null,
     completedTargets: [],
     currentChallenge: { topic: null, element: null, context: null },
-    usedCombos: [],
     predictions: [],
     carouselFinished: false,
-    draftText: ''
+    draftText: '',
+    sessionId: null
   };
 
   var isSaving = false;
@@ -193,10 +276,10 @@
       gameState.currentTarget = saved.currentTarget || null;
       gameState.completedTargets = Array.isArray(saved.completedTargets) ? saved.completedTargets : [];
       gameState.currentChallenge = saved.currentChallenge || { topic: null, element: null, context: null };
-      gameState.usedCombos = Array.isArray(saved.usedCombos) ? saved.usedCombos : [];
       gameState.predictions = Array.isArray(saved.predictions) ? saved.predictions : [];
       gameState.draftText = typeof saved.draftText === 'string' ? saved.draftText : '';
       gameState.currentScreen = typeof saved.currentScreen === 'number' ? saved.currentScreen : 1;
+      gameState.sessionId = typeof saved.sessionId === 'string' ? saved.sessionId : null;
     } catch (e) {
       /* corrupted state — start fresh */
     }
@@ -208,10 +291,6 @@
 
   function pickRandom(arr) {
     return arr[Math.floor(Math.random() * arr.length)];
-  }
-
-  function comboKey(c) {
-    return c.topic + '|' + c.element + '|' + c.context;
   }
 
   function prefersReducedMotion() {
@@ -232,19 +311,172 @@
 
   /* =========================================================
      CHALLENGE GENERATION
+     Bolsas barajadas (Fisher-Yates) sin reposición, con
+     persistencia en localStorage para no repetir entre partidas.
   ========================================================= */
 
-  function generateChallenge(excludeCombo) {
-    var challenge;
-    var attempts = 0;
-    do {
-      challenge = {
-        topic: pickRandom(topics),
-        element: pickRandom(requiredElements),
-        context: pickRandom(contexts)
-      };
+  var BAGS_KEY = 'gfb_bags_v1';
+  var SEEN_KEY = 'gfb_seen_v1';
+  var SEEN_MAX = 60; // cuántas ternas recordamos antes de olvidar las viejas
+  var CONTEXT_RETRY_LIMIT = 40; // más que el tamaño del mazo de contexts
+
+  var bags = { topic: [], element: [], context: [] };
+  var lastDrawn = { topic: null, element: null, context: null };
+  var seenCombos = [];
+
+  function shuffle(arr) {
+    var copy = arr.slice();
+    for (var i = copy.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = copy[i];
+      copy[i] = copy[j];
+      copy[j] = tmp;
+    }
+    return copy;
+  }
+
+  function poolFor(axis) {
+    if (axis === 'topic') return TOPICS;
+    if (axis === 'element') return ELEMENTS;
+    return CONTEXTS;
+  }
+
+  function loadGenerator() {
+    try {
+      var rawBags = localStorage.getItem(BAGS_KEY);
+      if (rawBags) {
+        var parsed = JSON.parse(rawBags);
+        if (parsed && typeof parsed === 'object') {
+          bags.topic = Array.isArray(parsed.topic) ? parsed.topic : [];
+          bags.element = Array.isArray(parsed.element) ? parsed.element : [];
+          bags.context = Array.isArray(parsed.context) ? parsed.context : [];
+          lastDrawn = parsed.last || lastDrawn;
+        }
+      }
+      var rawSeen = localStorage.getItem(SEEN_KEY);
+      if (rawSeen) {
+        var s = JSON.parse(rawSeen);
+        if (Array.isArray(s)) seenCombos = s;
+      }
+    } catch (e) {
+      /* storage bloqueado o data corrupta: el juego sigue con mazos nuevos */
+    }
+  }
+
+  function saveGenerator() {
+    try {
+      localStorage.setItem(BAGS_KEY, JSON.stringify({
+        topic: bags.topic, element: bags.element, context: bags.context, last: lastDrawn
+      }));
+      localStorage.setItem(SEEN_KEY, JSON.stringify(seenCombos.slice(-SEEN_MAX)));
+    } catch (e) {
+      /* sin persistencia el juego funciona igual, solo puede repetir entre partidas */
+    }
+  }
+
+  /* Saca un ítem del mazo. Si el mazo está vacío lo rebaraja, y si
+     la primera carta del mazo nuevo es la última que salió, la
+     manda al fondo (evita repetir justo en el borde). */
+  function drawFrom(axis) {
+    var pool = poolFor(axis);
+    if (!bags[axis] || bags[axis].length === 0) {
+      var indices = [];
+      for (var i = 0; i < pool.length; i++) indices.push(i);
+      var fresh = shuffle(indices);
+      if (fresh.length > 1 && pool[fresh[0]].t === lastDrawn[axis]) {
+        fresh.push(fresh.shift());
+      }
+      bags[axis] = fresh;
+    }
+    var item = pool[bags[axis].shift()];
+    lastDrawn[axis] = item.t;
+    return item;
+  }
+
+  /* Devuelve la carta al FINAL del mazo (no al frente): así no se
+     vuelve a sacar de inmediato en el próximo intento, y sigue
+     circulando en vez de perderse. */
+  function putBack(axis, item) {
+    var pool = poolFor(axis);
+    for (var i = 0; i < pool.length; i++) {
+      if (pool[i].t === item.t) { bags[axis].push(i); return; }
+    }
+  }
+
+  /* Saca el índice de una carta puntual del mazo, si está ahí.
+     La usa el fallback determinístico para no dejar la carta
+     duplicada (en el mazo y en uso) tras un pickValidContext. */
+  function removeFromBag(axis, item) {
+    var pool = poolFor(axis);
+    for (var i = 0; i < pool.length; i++) {
+      if (pool[i].t === item.t) {
+        var idx = bags[axis].indexOf(i);
+        if (idx !== -1) bags[axis].splice(idx, 1);
+        return;
+      }
+    }
+  }
+
+  function comboKey(c) {
+    return c.topic + '|' + c.element + '|' + c.context;
+  }
+
+  /* Rechaza la terna si tema y contexto son de la misma familia
+     (frase plana) o si la terna exacta ya salió antes. */
+  function isBadCombo(topic, element, context) {
+    if (topic.f === context.f) return true;
+    var key = topic.t + '|' + element.t + '|' + context.t;
+    return seenCombos.indexOf(key) !== -1;
+  }
+
+  /* Barrido determinístico sobre TODO el mazo de contexts (no solo
+     lo que queda en la bolsa). Nunca devuelve un context de la
+     misma familia que topic: eso se descarta sí o sí. Entre los
+     de familia distinta, prioriza uno que no esté en seenCombos;
+     solo si no queda ninguno sin usar (caso extremo) acepta uno
+     ya visto, para garantizar que la función siempre termina. */
+  function forceValidContext(topic, element) {
+    var strictMatch = null;
+    var familySafeMatch = null;
+    for (var i = 0; i < CONTEXTS.length; i++) {
+      var candidate = CONTEXTS[i];
+      if (candidate.f === topic.f) continue;
+      if (!familySafeMatch) familySafeMatch = candidate;
+      var key = topic.t + '|' + element.t + '|' + candidate.t;
+      if (seenCombos.indexOf(key) === -1) { strictMatch = candidate; break; }
+    }
+    var chosen = strictMatch || familySafeMatch;
+    removeFromBag('context', chosen);
+    return chosen;
+  }
+
+  /* topic y element se sortean una única vez por generación (nunca
+     entran en conflicto entre sí). Solo context se reintenta, ya
+     que es el único eje que puede colisionar con topic. */
+  function pickValidContext(topic, element) {
+    var context = drawFrom('context');
+    var attempts = 1;
+    while (isBadCombo(topic, element, context) && attempts < CONTEXT_RETRY_LIMIT) {
+      putBack('context', context);
+      context = drawFrom('context');
       attempts++;
-    } while (excludeCombo && comboKey(challenge) === comboKey(excludeCombo) && attempts < 60);
+    }
+    if (isBadCombo(topic, element, context)) {
+      putBack('context', context);
+      context = forceValidContext(topic, element);
+    }
+    return context;
+  }
+
+  function generateChallenge() {
+    var topic = drawFrom('topic');
+    var element = drawFrom('element');
+    var context = pickValidContext(topic, element);
+
+    var challenge = { topic: topic.t, element: element.t, context: context.t };
+    seenCombos.push(comboKey(challenge));
+    if (seenCombos.length > SEEN_MAX) seenCombos = seenCombos.slice(-SEEN_MAX);
+    saveGenerator();
     return challenge;
   }
 
@@ -343,7 +575,10 @@
   function renderSummary() {
     var list = document.getElementById('summary-list');
     list.innerHTML = '';
-    gameState.predictions.forEach(function (p) {
+    var currentSessionPredictions = gameState.predictions.filter(function (p) {
+      return p.session === gameState.sessionId;
+    });
+    currentSessionPredictions.forEach(function (p) {
       var card = document.createElement('div');
       card.className = 'summary-card';
       card.innerHTML =
@@ -415,7 +650,7 @@
     gameState.firstTarget = null;
     gameState.currentTarget = null;
     gameState.completedTargets = [];
-    gameState.usedCombos = [];
+    gameState.sessionId = 'p-' + Date.now();
     resetCurrentChallenge();
     gameState.draftText = '';
     saveGameState();
@@ -442,8 +677,7 @@
   }
 
   function generateAndAnimateRealChallenge() {
-    var exclude = gameState.usedCombos.length ? gameState.usedCombos[0] : null;
-    var challenge = generateChallenge(exclude);
+    var challenge = generateChallenge();
     gameState.currentChallenge = challenge;
     gameState.carouselFinished = false;
     saveGameState();
@@ -497,15 +731,11 @@
       context: gameState.currentChallenge.context,
       text: text,
       order: gameState.predictions.length + 1,
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
+      session: gameState.sessionId
     };
 
     gameState.predictions.push(prediction);
-    gameState.usedCombos.push({
-      topic: gameState.currentChallenge.topic,
-      element: gameState.currentChallenge.element,
-      context: gameState.currentChallenge.context
-    });
     gameState.completedTargets.push(gameState.currentTarget);
     gameState.draftText = '';
     saveGameState();
@@ -586,6 +816,7 @@
   ========================================================= */
 
   document.addEventListener('DOMContentLoaded', function () {
+    loadGenerator();
     loadGameState();
     // Always start a fresh visit at the intro screen; saved predictions persist regardless.
     goToScreen(1);

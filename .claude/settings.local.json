@@ -3,7 +3,19 @@
     "allow": [
       "Bash(ls -la /Users/linaandrada/generador-futuros-borders-v2 2>&1 | head -20; echo \"---\"; ls -la /Users/linaandrada/Desktop/generador-futuros-borders-v2 2>&1 | head -20)",
       "Read(//Users/linaandrada/**)",
-      "Bash(node --check app.js)"
+      "Bash(node --check app.js)",
+      "Bash(node -e \"require.resolve\\('playwright'\\)\")",
+      "Bash(npx --yes playwright --version)",
+      "Bash(npm ls *)",
+      "Bash(npx playwright *)",
+      "Read(//Users/linaandrada/Library/Caches/ms-playwright/**)",
+      "Bash(mkdir -p /private/tmp/claude-501/-Users-linaandrada-Desktop-generador-futuros-borders-v2/0a3f7d04-4e09-4945-87c7-9bdd9359ad68/scratchpad)",
+      "Bash(npm init *)",
+      "Bash(npm install *)",
+      "Bash(node -e 'const {chromium} = require\\('\\\\''/private/tmp/claude-501/-Users-linaandrada-Desktop-generador-futuros-borders-v2/0a3f7d04-4e09-4945-87c7-9bdd9359ad68/scratchpad/node_modules/playwright'\\\\''\\); console.log\\(typeof chromium.launch\\)')",
+      "Bash(node test-flow.js)",
+      "Bash(lsof -ti:8123 -sTCP:LISTEN)",
+      "Bash(xargs -r kill)"
     ]
   }
 }

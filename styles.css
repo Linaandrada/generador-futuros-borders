@@ -382,12 +382,13 @@ img {
 
 .carousel-card {
   flex-shrink: 0;
+  max-width: 100%;
   padding: 16px 18px;
   border-radius: 14px;
   font-size: 15px;
   font-weight: 700;
   color: #3a3a3a;
-  white-space: nowrap;
+  white-space: normal;
 }
 
 .carousel-topic .carousel-card { background: #eef0a0; }
