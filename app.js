@@ -127,7 +127,6 @@
   var contexts = textsOf(CONTEXTS);
 
   var STORAGE_KEY = 'generadorFuturosBorders';
-  var TARGETS = ['Lina', 'Yo'];
 
   /* =========================================================
      STATE
@@ -135,6 +134,10 @@
 
   var gameState = {
     currentScreen: 1,
+    players: [
+      { id: 'player-1', name: '' },
+      { id: 'player-2', name: '' }
+    ],
     firstTarget: null,
     currentTarget: null,
     completedTargets: [],
@@ -145,6 +148,7 @@
     sessionId: null
   };
 
+  var screenHistory = [];
   var isSaving = false;
   var pendingHomeAction = null;
   var isExportingImage = false;
@@ -272,6 +276,7 @@
       if (!raw) return;
       var saved = JSON.parse(raw);
       if (!saved || typeof saved !== 'object') return;
+      gameState.players = normalizePlayers(saved.players);
       gameState.firstTarget = saved.firstTarget || null;
       gameState.currentTarget = saved.currentTarget || null;
       gameState.completedTargets = Array.isArray(saved.completedTargets) ? saved.completedTargets : [];
@@ -283,6 +288,21 @@
     } catch (e) {
       /* corrupted state — start fresh */
     }
+  }
+
+  /* Si el localStorage viene de una versión anterior (sin `players`,
+     o con datos corruptos), devuelve el par por defecto en vez de
+     romper el arranque. Los datos viejos de predicciones no se tocan. */
+  function normalizePlayers(raw) {
+    var defaults = [{ id: 'player-1', name: '' }, { id: 'player-2', name: '' }];
+    if (!Array.isArray(raw) || raw.length !== 2) return defaults;
+    var out = [];
+    for (var i = 0; i < 2; i++) {
+      var entry = raw[i];
+      var name = (entry && typeof entry.name === 'string') ? entry.name : '';
+      out.push({ id: defaults[i].id, name: name });
+    }
+    return out;
   }
 
   /* =========================================================
@@ -297,8 +317,61 @@
     return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }
 
+  function getPlayer(id) {
+    for (var i = 0; i < gameState.players.length; i++) {
+      if (gameState.players[i].id === id) return gameState.players[i];
+    }
+    return null;
+  }
+
+  function getPlayerName(id) {
+    var player = getPlayer(id);
+    return player ? player.name : '';
+  }
+
   function otherTarget(target) {
-    return target === 'Lina' ? 'Yo' : 'Lina';
+    return target === 'player-1' ? 'player-2' : 'player-1';
+  }
+
+  var PLAYER_NAME_MAX = 20;
+  var PLAYER_NAME_PATTERN = /^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$/;
+
+  function sanitizePlayerName(raw) {
+    return (raw || '').trim();
+  }
+
+  /* Devuelve { valid, name, error }. `otherName` es el nombre ya
+     cargado del otro jugador (o null si todavía no existe), para
+     poder rechazar nombres duplicados. */
+  function validatePlayerName(raw, otherName) {
+    var name = sanitizePlayerName(raw);
+    if (!name) {
+      return { valid: false, error: 'Escribí un nombre para continuar.' };
+    }
+    if (name.length > PLAYER_NAME_MAX) {
+      return { valid: false, error: 'Máximo ' + PLAYER_NAME_MAX + ' caracteres.' };
+    }
+    if (!PLAYER_NAME_PATTERN.test(name)) {
+      return { valid: false, error: 'Usá solo letras, espacios, apóstrofes o guiones.' };
+    }
+    if (otherName && name.toLowerCase() === sanitizePlayerName(otherName).toLowerCase()) {
+      return { valid: false, error: 'Los dos nombres no pueden ser iguales.' };
+    }
+    return { valid: true, name: name, error: null };
+  }
+
+  function showFieldError(id, message) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = message;
+    el.hidden = false;
+  }
+
+  function hideFieldError(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.hidden = true;
+    el.textContent = '';
   }
 
   function $(selector, scope) {
@@ -593,7 +666,13 @@
      NAVIGATION
   ========================================================= */
 
-  function goToScreen(n) {
+  /* isBack=true evita empujar la pantalla actual al historial (la
+     estamos abandonando hacia atrás, no hacia adelante) y evita
+     que se vuelva a apilar la que goBack() ya sacó del tope. */
+  function goToScreen(n, isBack) {
+    if (!isBack && gameState.currentScreen && gameState.currentScreen !== n) {
+      screenHistory.push(gameState.currentScreen);
+    }
     $all('.screen').forEach(function (s) {
       s.hidden = true;
     });
@@ -604,24 +683,38 @@
     }
     gameState.currentScreen = n;
     saveGameState();
+    if (n === 9) renderPlayerSelectOptions();
+  }
+
+  /* "Atrás": retrocede exactamente un paso siguiendo el recorrido
+     real (no reinicia nada, no borra nombres ni predicciones). */
+  function goBack() {
+    var previous = screenHistory.pop();
+    if (previous == null) {
+      goToScreen(1);
+      return;
+    }
+    goToScreen(previous, true);
   }
 
   function applyRealTheme(target) {
-    var yo = target === 'Yo';
+    /* Tema estable por jugador (player-1 / player-2), no por quién
+       empieza primero: cada persona conserva su color toda la partida. */
+    var isPlayerOne = target === 'player-1';
     ['screen-10', 'screen-11', 'screen-12'].forEach(function (id) {
       var el = document.getElementById(id);
       if (!el) return;
-      el.classList.toggle('theme-bg-yo', yo);
-      el.classList.toggle('theme-bg-lina', !yo);
+      el.classList.toggle('theme-bg-yo', !isPlayerOne);
+      el.classList.toggle('theme-bg-lina', isPlayerOne);
     });
     ['screen-13', 'screen-14'].forEach(function (id) {
       var el = document.getElementById(id);
       if (!el) return;
-      el.classList.toggle('theme-flat-yo', yo);
-      el.classList.toggle('theme-flat-lina', !yo);
+      el.classList.toggle('theme-flat-yo', !isPlayerOne);
+      el.classList.toggle('theme-flat-lina', isPlayerOne);
     });
     var card = document.getElementById('real-challenge-card');
-    if (card) card.classList.toggle('theme-yo', yo);
+    if (card) card.classList.toggle('theme-yo', !isPlayerOne);
   }
 
   function setRadioSelection(cards, selectedCard) {
@@ -647,6 +740,10 @@
   }
 
   function startRealGame() {
+    gameState.players = [
+      { id: 'player-1', name: '' },
+      { id: 'player-2', name: '' }
+    ];
     gameState.firstTarget = null;
     gameState.currentTarget = null;
     gameState.completedTargets = [];
@@ -655,10 +752,60 @@
     gameState.draftText = '';
     saveGameState();
 
+    var nameOneInput = document.getElementById('player-one-name');
+    if (nameOneInput) nameOneInput.value = '';
+    hideFieldError('player-one-error');
+    var nameTwoInput = document.getElementById('player-two-name');
+    if (nameTwoInput) nameTwoInput.value = '';
+    hideFieldError('player-two-error');
+
     var cards = $all('.option-card', document.getElementById('screen-9'));
     setRadioSelection(cards, null);
     document.getElementById('target-continue-btn').disabled = true;
+    goToScreen(18);
+  }
+
+  function confirmPlayerOneName() {
+    var input = document.getElementById('player-one-name');
+    var result = validatePlayerName(input.value, null);
+    if (!result.valid) {
+      showFieldError('player-one-error', result.error);
+      return;
+    }
+    hideFieldError('player-one-error');
+    gameState.players[0].name = result.name;
+    input.value = result.name;
+    saveGameState();
+    goToScreen(19);
+  }
+
+  function confirmPlayerTwoName() {
+    var input = document.getElementById('player-two-name');
+    var result = validatePlayerName(input.value, gameState.players[0].name);
+    if (!result.valid) {
+      showFieldError('player-two-error', result.error);
+      return;
+    }
+    hideFieldError('player-two-error');
+    gameState.players[1].name = result.name;
+    input.value = result.name;
+    saveGameState();
     goToScreen(9);
+  }
+
+  function renderPlayerSelectOptions() {
+    var container = document.getElementById('real-target-options');
+    if (!container) return;
+    $all('.option-player-name', container).forEach(function (el) {
+      el.textContent = getPlayerName(el.dataset.playerId);
+    });
+    var cards = $all('.option-card', container);
+    var selected = null;
+    if (gameState.currentTarget) {
+      selected = cards.filter(function (c) { return c.dataset.realTarget === gameState.currentTarget; })[0] || null;
+    }
+    setRadioSelection(cards, selected);
+    document.getElementById('target-continue-btn').disabled = !selected;
   }
 
   function selectRealTarget(target, clickedCard) {
@@ -723,9 +870,11 @@
     var btn = document.getElementById('save-prediction-btn');
     btn.disabled = true;
 
+    var playerName = getPlayerName(gameState.currentTarget);
+
     var prediction = {
       id: 'prediction-' + Date.now(),
-      target: gameState.currentTarget,
+      target: playerName,
       topic: gameState.currentChallenge.topic,
       requiredElement: gameState.currentChallenge.element,
       context: gameState.currentChallenge.context,
@@ -741,6 +890,8 @@
     saveGameState();
 
     document.getElementById('saved-prediction-text').textContent = '“' + text + '”';
+    var ownerLabel = document.getElementById('prediction-owner-label');
+    if (ownerLabel) ownerLabel.textContent = 'La predicción de ' + playerName;
     var afterBtn = document.getElementById('after-save-btn');
     afterBtn.textContent = gameState.completedTargets.length < 2 ? 'Continuar' : 'Ver mis predicciones';
 
@@ -774,6 +925,7 @@
   }
 
   function backToHome() {
+    screenHistory = [];
     goToScreen(1);
   }
 
@@ -819,6 +971,7 @@
     loadGenerator();
     loadGameState();
     // Always start a fresh visit at the intro screen; saved predictions persist regardless.
+    screenHistory = [];
     goToScreen(1);
     setupImageExportUI();
 
@@ -828,6 +981,19 @@
       updateSaveButtonState();
       saveGameState();
     });
+
+    var playerOneInput = document.getElementById('player-one-name');
+    if (playerOneInput) {
+      playerOneInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') { e.preventDefault(); confirmPlayerOneName(); }
+      });
+    }
+    var playerTwoInput = document.getElementById('player-two-name');
+    if (playerTwoInput) {
+      playerTwoInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') { e.preventDefault(); confirmPlayerTwoName(); }
+      });
+    }
 
     document.addEventListener('click', function (e) {
       var realCard = e.target.closest('[data-real-target]');
@@ -844,6 +1010,8 @@
         case 'start-onboarding': startOnboarding(); break;
         case 'goto-screen-8': goToRealGameIntro(); break;
         case 'start-real-game': startRealGame(); break;
+        case 'confirm-player-one': confirmPlayerOneName(); break;
+        case 'confirm-player-two': confirmPlayerTwoName(); break;
         case 'confirm-real-target': confirmRealTarget(); break;
         case 'goto-real-result': goToRealResult(); break;
         case 'goto-write': goToWriteScreen(); break;
@@ -855,6 +1023,7 @@
         case 'goto-transition': goToTransition(); break;
         case 'finish-game': finishGame(); break;
         case 'back-to-home': backToHome(); break;
+        case 'go-back': goBack(); break;
         case 'request-home': requestHome(); break;
         case 'modal-cancel': hideModal(); break;
         case 'modal-confirm':

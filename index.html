@@ -14,7 +14,7 @@
     <section class="screen" id="screen-1" data-screen="1" aria-label="Inicio">
       <div class="screen-inner">
         <header class="brand-row">
-          <span class="handle">@linaandrada</span>
+          <span class="handle"><a href="https://www.instagram.com/linaandrada" target="_blank" rel="noopener noreferrer">@linaandrada</a></span>
         </header>
         <div class="hero-illustration">
           <img src="assets/images/dino-inicio.png" alt="Dinosaurio saludando con remera de fuego" onerror="this.onerror=null;this.src='assets/images/placeholder.svg'">
@@ -36,10 +36,10 @@
     <section class="screen" id="screen-2" data-screen="2" aria-label="Cómo se juega" hidden>
       <div class="screen-inner">
         <header class="nav-row">
-          <span class="handle">@linaandrada</span>
+          <span class="handle"><a href="https://www.instagram.com/linaandrada" target="_blank" rel="noopener noreferrer">@linaandrada</a></span>
           <span class="logo">GDF<span class="logo-accent">borders</span></span>
         </header>
-        <button class="back-link" data-action="request-home">&larr; Volver al inicio</button>
+        <button class="back-link" data-action="go-back">&larr; Atrás</button>
         <h1 class="title-md">¿Cómo se juega?</h1>
         <p class="subtitle">Vas a crear predicciones para vos y para otras personas. Después, el juego continúa fuera de la pantalla para compartir, crear y elegir las mejores predicciones.</p>
         <div class="step-stack">
@@ -57,7 +57,7 @@
     <section class="screen" id="screen-8" data-screen="8" aria-label="Inicio del juego real" hidden>
       <div class="screen-inner">
         <header class="nav-row">
-          <span class="handle">@linaandrada</span>
+          <span class="handle"><a href="https://www.instagram.com/linaandrada" target="_blank" rel="noopener noreferrer">@linaandrada</a></span>
           <span class="logo">GDF<span class="logo-accent">borders</span></span>
         </header>
         <h1 class="title-center">¡Ahora a jugar!</h1>
@@ -71,23 +71,63 @@
       </div>
     </section>
 
+    <!-- SCREEN 18: Ingresá tu nombre -->
+    <section class="screen" id="screen-18" data-screen="18" aria-label="Ingresá tu nombre" hidden>
+      <div class="screen-inner">
+        <header class="nav-row">
+          <span class="handle"><a href="https://www.instagram.com/linaandrada" target="_blank" rel="noopener noreferrer">@linaandrada</a></span>
+          <span class="logo">GDF<span class="logo-accent">borders</span></span>
+        </header>
+        <button class="back-link" data-action="go-back">&larr; Atrás</button>
+        <h1 class="title-md">Ingresá tu nombre</h1>
+        <p class="subtitle">Lo vamos a usar para personalizar tus predicciones.</p>
+        <div class="name-input-wrap">
+          <input type="text" id="player-one-name" class="name-input" maxlength="20" placeholder="Dino" autocomplete="off">
+        </div>
+        <p class="field-error" id="player-one-error" hidden></p>
+      </div>
+      <div class="button-bar">
+        <button class="btn btn-primary" data-action="confirm-player-one">Continuar</button>
+      </div>
+    </section>
+
+    <!-- SCREEN 19: Ingresá el nombre de la otra persona -->
+    <section class="screen" id="screen-19" data-screen="19" aria-label="Ingresá el nombre de la otra persona" hidden>
+      <div class="screen-inner">
+        <header class="nav-row">
+          <span class="handle"><a href="https://www.instagram.com/linaandrada" target="_blank" rel="noopener noreferrer">@linaandrada</a></span>
+          <span class="logo">GDF<span class="logo-accent">borders</span></span>
+        </header>
+        <button class="back-link" data-action="go-back">&larr; Atrás</button>
+        <h1 class="title-md">Ingresá el nombre de la otra persona</h1>
+        <p class="subtitle">Puede ser alguien con quien quieras imaginar el futuro.</p>
+        <div class="name-input-wrap">
+          <input type="text" id="player-two-name" class="name-input" maxlength="20" placeholder="Dino" autocomplete="off">
+        </div>
+        <p class="field-error" id="player-two-error" hidden></p>
+      </div>
+      <div class="button-bar">
+        <button class="btn btn-primary" data-action="confirm-player-two">Continuar</button>
+      </div>
+    </section>
+
     <!-- SCREEN 9: Selección real de persona -->
     <section class="screen" id="screen-9" data-screen="9" aria-label="Selección de persona" hidden>
       <div class="screen-inner">
         <header class="nav-row">
-          <span class="handle">@linaandrada</span>
+          <span class="handle"><a href="https://www.instagram.com/linaandrada" target="_blank" rel="noopener noreferrer">@linaandrada</a></span>
           <span class="logo">GDF<span class="logo-accent">borders</span></span>
         </header>
-        <button class="back-link" data-action="request-home">&larr; Volver al inicio</button>
+        <button class="back-link" data-action="go-back">&larr; Atrás</button>
         <h1 class="title-md">¿Por quién querés empezar?</h1>
         <div class="option-list" role="radiogroup" aria-label="¿Por quién querés empezar?" id="real-target-options">
-          <button type="button" class="option-card option-lina" data-real-target="Lina" role="radio" aria-checked="false">
+          <button type="button" class="option-card option-lina" data-real-target="player-1" role="radio" aria-checked="false">
             <span class="checkbox" aria-hidden="true"></span>
-            <span class="option-text"><strong>Lina</strong><br>Imaginar el futuro de otra persona</span>
+            <span class="option-text"><strong class="option-player-name" data-player-id="player-1"></strong></span>
           </button>
-          <button type="button" class="option-card option-yo" data-real-target="Yo" role="radio" aria-checked="false">
+          <button type="button" class="option-card option-yo" data-real-target="player-2" role="radio" aria-checked="false">
             <span class="checkbox" aria-hidden="true"></span>
-            <span class="option-text"><strong>Yo</strong><br>Imaginar mi propio futuro</span>
+            <span class="option-text"><strong class="option-player-name" data-player-id="player-2"></strong></span>
           </button>
         </div>
       </div>
@@ -100,10 +140,10 @@
     <section class="screen" id="screen-10" data-screen="10" aria-label="Generando desafío" hidden>
       <div class="screen-inner">
         <header class="nav-row">
-          <span class="handle">@linaandrada</span>
+          <span class="handle"><a href="https://www.instagram.com/linaandrada" target="_blank" rel="noopener noreferrer">@linaandrada</a></span>
           <span class="logo">GDF<span class="logo-accent">borders</span></span>
         </header>
-        <button class="back-link" data-action="request-home">&larr; Volver al inicio</button>
+        <button class="back-link" data-action="go-back">&larr; Atrás</button>
         <h1 class="title-md">Generando desafío…</h1>
         <div class="carousel-group" id="real-carousels">
           <div class="carousel-box carousel-topic">
@@ -130,10 +170,10 @@
     <section class="screen" id="screen-11" data-screen="11" aria-label="Tu desafío" hidden>
       <div class="screen-inner">
         <header class="nav-row">
-          <span class="handle">@linaandrada</span>
+          <span class="handle"><a href="https://www.instagram.com/linaandrada" target="_blank" rel="noopener noreferrer">@linaandrada</a></span>
           <span class="logo">GDF<span class="logo-accent">borders</span></span>
         </header>
-        <button class="back-link" data-action="request-home">&larr; Volver al inicio</button>
+        <button class="back-link" data-action="go-back">&larr; Atrás</button>
         <h1 class="title-md">Tu desafío</h1>
         <div class="challenge-card-wrap">
           <div class="challenge-card" id="real-challenge-card">
@@ -155,10 +195,10 @@
     <section class="screen" id="screen-12" data-screen="12" aria-label="Escribe tu predicción" hidden>
       <div class="screen-inner">
         <header class="nav-row">
-          <span class="handle">@linaandrada</span>
+          <span class="handle"><a href="https://www.instagram.com/linaandrada" target="_blank" rel="noopener noreferrer">@linaandrada</a></span>
           <span class="logo">GDF<span class="logo-accent">borders</span></span>
         </header>
-        <button class="back-link" data-action="request-home">&larr; Volver al inicio</button>
+        <button class="back-link" data-action="go-back">&larr; Atrás</button>
         <h1 class="title-md">Escribe tu predicción</h1>
         <div class="chip-row" id="write-chip-row"></div>
         <div class="note-card note-card-editable">
@@ -182,9 +222,10 @@
     <section class="screen" id="screen-13" data-screen="13" aria-label="Predicción guardada" hidden>
       <div class="screen-inner">
         <header class="nav-row">
-          <span class="handle">@linaandrada</span>
+          <span class="handle"><a href="https://www.instagram.com/linaandrada" target="_blank" rel="noopener noreferrer">@linaandrada</a></span>
           <span class="logo">GDF<span class="logo-accent">borders</span></span>
         </header>
+        <p class="prediction-owner" id="prediction-owner-label"></p>
         <p class="quote-block" id="saved-prediction-text"></p>
         <div class="dino-center">
           <img src="assets/images/dino-pensando.png" alt="Dinosaurio pensando" onerror="this.onerror=null;this.src='assets/images/placeholder.svg'">
@@ -202,10 +243,10 @@
     <section class="screen" id="screen-14" data-screen="14" aria-label="Predicción completada" hidden>
       <div class="screen-inner">
         <header class="nav-row">
-          <span class="handle">@linaandrada</span>
+          <span class="handle"><a href="https://www.instagram.com/linaandrada" target="_blank" rel="noopener noreferrer">@linaandrada</a></span>
           <span class="logo">GDF<span class="logo-accent">borders</span></span>
         </header>
-        <button class="back-link" data-action="request-home">&larr; Volver al inicio</button>
+        <button class="back-link" data-action="go-back">&larr; Atrás</button>
         <h1 class="title-center">¡Listo!</h1>
         <p class="center-text">Ya escribiste la primera.<br>Ahora vamos por la segunda.</p>
         <div class="dino-center">
@@ -221,10 +262,10 @@
     <section class="screen" id="screen-15" data-screen="15" aria-label="Resumen de predicciones" hidden>
       <div class="screen-inner">
         <header class="nav-row">
-          <span class="handle">@linaandrada</span>
+          <span class="handle"><a href="https://www.instagram.com/linaandrada" target="_blank" rel="noopener noreferrer">@linaandrada</a></span>
           <span class="logo">GDF<span class="logo-accent">borders</span></span>
         </header>
-        <button class="back-link" data-action="request-home">&larr; Volver al inicio</button>
+        <button class="back-link" data-action="go-back">&larr; Atrás</button>
         <div class="summary-list" id="summary-list"></div>
       </div>
       <div class="button-bar">
@@ -236,10 +277,10 @@
     <section class="screen screen-gradient" id="screen-16" data-screen="16" aria-label="Transición al juego físico" hidden>
       <div class="screen-inner">
         <header class="nav-row">
-          <span class="handle">@linaandrada</span>
+          <span class="handle"><a href="https://www.instagram.com/linaandrada" target="_blank" rel="noopener noreferrer">@linaandrada</a></span>
           <span class="logo">GDF<span class="logo-accent">borders</span></span>
         </header>
-        <button class="back-link" data-action="request-home">&larr; Volver al inicio</button>
+        <button class="back-link" data-action="go-back">&larr; Atrás</button>
         <h1 class="title-md">¡Bienvenido a la siguiente etapa!</h1>
         <p class="subtitle">La experiencia continúa fuera de la pantalla.</p>
         <p class="body-text">Ahora vas a poder:</p>
@@ -262,7 +303,7 @@
     <section class="screen" id="screen-17" data-screen="17" aria-label="Confirmación final" hidden>
       <div class="screen-inner">
         <header class="nav-row">
-          <span class="handle">@linaandrada</span>
+          <span class="handle"><a href="https://www.instagram.com/linaandrada" target="_blank" rel="noopener noreferrer">@linaandrada</a></span>
           <span class="logo">GDF<span class="logo-accent">borders</span></span>
         </header>
         <div class="dino-center">

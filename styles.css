@@ -101,6 +101,11 @@ img {
   line-height: 1.1;
 }
 
+.handle a {
+  color: inherit;
+  text-decoration: none;
+}
+
 .logo-accent {
   display: block;
   color: #e8683c;
@@ -278,6 +283,40 @@ img {
 .step-3.accent {
   background: #b8ecc9;
   transform: translateY(-2px);
+}
+
+/* ===== Name input (ingreso de nombres) ===== */
+.name-input-wrap {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+  margin-top: 20px;
+}
+
+.name-input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 700;
+  color: #3a3a3a;
+  padding: 18px 16px;
+}
+
+.name-input:focus {
+  outline: none;
+}
+
+.name-input::placeholder {
+  color: #9a9a8c;
+  font-weight: 400;
+}
+
+.field-error {
+  color: #c0392b;
+  font-size: 13px;
+  margin: 8px 2px 0;
 }
 
 /* ===== Option cards (person selection) ===== */
@@ -517,13 +556,20 @@ img {
 }
 
 /* ===== Quote block (finished prediction) ===== */
+.prediction-owner {
+  font-size: 14px;
+  color: rgba(58,58,58,0.65);
+  text-align: center;
+  margin: 32px 0 0;
+}
+
 .quote-block {
   font-size: 24px;
   font-weight: 700;
   line-height: 1.35;
   text-align: center;
   color: #2f2f2f;
-  margin: 32px 0 0;
+  margin: 8px 0 0;
   overflow-y: auto;
   max-height: 42vh;
 }
@@ -655,7 +701,7 @@ img {
   margin: 0 0 10px;
 }
 
-/* ===== Theme variants (color reflects selected target: verde = otra persona, amarillo = Yo) ===== */
+/* ===== Theme variants (tema estable por jugador: verde = player-1, amarillo = player-2, sin importar quién empieza) ===== */
 .theme-bg-lina {
   background: linear-gradient(180deg, #63cf94 0%, #a9e6bd 55%, #eef0dd 100%);
 }
