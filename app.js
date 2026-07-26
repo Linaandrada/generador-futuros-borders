@@ -215,10 +215,10 @@
     predictionMode: null,          // 'self' | 'other'
     currentRecipient: '',          // nombre a mostrar en la predicción actual
     currentChallenge: { topic: null, element: null, context: null },
-    currentDraft: '',              // borrador de la predicción en curso
+    currentDraft: null,            // borrador en curso: { year, name, action, reason } | null
     currentPrediction: null,       // última predicción creada: { id, recipient, mode, challenge, text, sessionId, date }
     stageTwoMode: null,            // 'solo' | 'group'
-    stageTwoActivity: null,        // 'draw-solo' | 'continue-solo' | 'share-group' | 'defend' | 'vote' | 'draw-group'
+    stageTwoActivity: null,        // 'draw-solo' | 'continue-solo' | 'defend' | 'vote' | 'draw-group'
     predictions: [],               // historial persistido de predicciones
     carouselFinished: false,
     sessionId: null
@@ -372,7 +372,7 @@
       gameState.predictionMode = (saved.predictionMode === 'self' || saved.predictionMode === 'other') ? saved.predictionMode : null;
       gameState.currentRecipient = typeof saved.currentRecipient === 'string' ? saved.currentRecipient : '';
       gameState.currentChallenge = saved.currentChallenge || { topic: null, element: null, context: null };
-      gameState.currentDraft = typeof saved.currentDraft === 'string' ? saved.currentDraft : '';
+      gameState.currentDraft = (saved.currentDraft && typeof saved.currentDraft === 'object') ? saved.currentDraft : null;
       gameState.currentPrediction = (saved.currentPrediction && typeof saved.currentPrediction === 'object') ? saved.currentPrediction : null;
       gameState.stageTwoMode = typeof saved.stageTwoMode === 'string' ? saved.stageTwoMode : null;
       gameState.stageTwoActivity = typeof saved.stageTwoActivity === 'string' ? saved.stageTwoActivity : null;
@@ -625,31 +625,14 @@
 
   /* =========================================================
      PREDICTION TEMPLATE
+     Cuatro campos reales (año, nombre, qué va a pasar, motivo)
+     integrados visualmente en una oración fija. El texto fijo no
+     es un campo: es texto estático, así que nunca es editable.
   ========================================================= */
 
-  function buildPredictionTemplate(name) {
-    return 'En 202__, ' + name + ' va a...\nporque ___________________.';
-  }
-
-  /* Reduce el texto a una firma comparable: el año (escrito o en
-     blanco) cuenta como un mismo token, cualquier tira de guiones
-     bajos se colapsa a una sola, y se ignoran signos y espacios.
-     Así "completar el año" o "tocar los guiones" nunca cuenta como
-     predicción real. */
-  function normalizeForTemplateCheck(text) {
-    return (text || '')
-      .replace(/^En\s+202[\d_]*,/i, 'En 202X,')
-      .replace(/_+/g, '_')
-      .replace(/[.,!¡¿?;:\-–—'"“”‘’…]/g, '')
-      .replace(/\s+/g, ' ')
-      .trim()
-      .toLowerCase();
-  }
-
-  /* La comparación siempre reconstruye la plantilla con el nombre
-     dinámico del destinatario actual: nunca depende de un nombre fijo. */
-  function isTemplateUnfilled(value, name) {
-    return normalizeForTemplateCheck(value) === normalizeForTemplateCheck(buildPredictionTemplate(name));
+  function autoGrowTextarea(el) {
+    el.style.height = 'auto';
+    el.style.height = el.scrollHeight + 'px';
   }
 
   /* =========================================================
@@ -807,7 +790,7 @@
   function startNewPredictionFlow() {
     gameState.predictionMode = null;
     gameState.currentRecipient = '';
-    gameState.currentDraft = '';
+    gameState.currentDraft = null;
     gameState.stageTwoMode = null;
     gameState.stageTwoActivity = null;
     resetCurrentChallenge();
@@ -911,41 +894,43 @@
     goToScreen(11);
   }
 
+  /* En el primer ingreso arma un borrador nuevo (nombre precargado
+     con el destinatario elegido); si ya existe uno (volvimos con
+     "Atrás" y entramos de nuevo), lo reutiliza tal cual, con
+     cualquier edición que la persona ya haya hecho. */
   function goToWriteScreen() {
     renderChips(document.getElementById('write-chip-row'), gameState.currentChallenge);
-    var textarea = document.getElementById('prediction-input');
-    var isFirstEntry = gameState.currentDraft === '';
-    var value = gameState.currentDraft;
 
-    if (isFirstEntry) {
-      value = buildPredictionTemplate(gameState.currentRecipient);
-      gameState.currentDraft = value;
+    if (!gameState.currentDraft) {
+      gameState.currentDraft = { year: '', name: gameState.currentRecipient, action: '', reason: '' };
       saveGameState();
     }
+    var draft = gameState.currentDraft;
 
-    textarea.value = value;
+    var yearInput = document.getElementById('year-input');
+    var nameInput = document.getElementById('name-field-input');
+    var actionInput = document.getElementById('action-input');
+    var reasonInput = document.getElementById('reason-input');
+
+    yearInput.value = draft.year || '';
+    nameInput.value = draft.name || '';
+    actionInput.value = draft.action || '';
+    reasonInput.value = draft.reason || '';
+    autoGrowTextarea(actionInput);
+    autoGrowTextarea(reasonInput);
+
     updateSaveButtonState();
     goToScreen(12);
-    setTimeout(function () {
-      textarea.focus();
-      if (isFirstEntry && typeof textarea.setSelectionRange === 'function') {
-        var cursorPos = value.indexOf('_');
-        if (cursorPos === -1) cursorPos = value.length;
-        textarea.setSelectionRange(cursorPos, cursorPos);
-      }
-    }, 300);
+    setTimeout(function () { yearInput.focus(); }, 300);
   }
 
   function updateSaveButtonState() {
-    var textarea = document.getElementById('prediction-input');
-    var btn = document.getElementById('save-prediction-btn');
-    var value = textarea.value;
-    var isEmpty = value.trim().length === 0;
-    var isUnfilledTemplate = !isEmpty && isTemplateUnfilled(value, gameState.currentRecipient);
-    btn.disabled = isEmpty || isUnfilledTemplate;
-    /* Mientras sea la plantilla sin completar, se muestra como guía
-       (gris claro); en cuanto hay contenido real, pasa a texto normal. */
-    textarea.classList.toggle('is-guide-text', isUnfilledTemplate);
+    var draft = gameState.currentDraft || {};
+    var yearValid = /^\d{4}$/.test(draft.year || '');
+    var nameValid = !!(draft.name && draft.name.trim());
+    var actionValid = !!(draft.action && draft.action.trim());
+    var reasonValid = !!(draft.reason && draft.reason.trim());
+    document.getElementById('save-prediction-btn').disabled = !(yearValid && nameValid && actionValid && reasonValid);
   }
 
   /* Guarda la predicción una única vez (el botón se deshabilita de
@@ -954,34 +939,42 @@
      screen-12 y reenviar el mismo formulario). */
   function savePrediction() {
     if (isSaving) return;
-    var textarea = document.getElementById('prediction-input');
-    var text = textarea.value.trim();
-    if (!text) return;
+    var draft = gameState.currentDraft;
+    if (!draft) return;
+
+    var year = (draft.year || '').trim();
+    var name = (draft.name || '').trim();
+    var action = (draft.action || '').trim();
+    var reason = (draft.reason || '').trim();
+    var isValid = /^\d{4}$/.test(year) && name && action && reason;
+    if (!isValid) return;
 
     isSaving = true;
-    var btn = document.getElementById('save-prediction-btn');
-    btn.disabled = true;
+    document.getElementById('save-prediction-btn').disabled = true;
+
+    var finalPrediction = 'En ' + year + ', ' + name + ' va a ' + action + '\n\nporque ' + reason + '.';
 
     var prediction = {
       id: 'prediction-' + Date.now(),
-      recipient: gameState.currentRecipient,
+      recipient: name,
       mode: gameState.predictionMode,
       challenge: {
         topic: gameState.currentChallenge.topic,
         element: gameState.currentChallenge.element,
         context: gameState.currentChallenge.context
       },
-      text: text,
+      text: finalPrediction,
       sessionId: gameState.sessionId,
       date: new Date().toISOString()
     };
 
     gameState.predictions.push(prediction);
     gameState.currentPrediction = prediction;
-    gameState.currentDraft = '';
+    gameState.currentRecipient = name;
+    gameState.currentDraft = null;
     saveGameState();
 
-    document.getElementById('saved-prediction-text').textContent = '“' + text + '”';
+    document.getElementById('saved-prediction-text').textContent = '“' + finalPrediction + '”';
     var ownerLabel = document.getElementById('prediction-owner-label');
     if (ownerLabel) ownerLabel.textContent = 'La predicción de ' + prediction.recipient;
 
@@ -1000,15 +993,15 @@
     document.getElementById('stage-two-continue-btn').disabled = false;
   }
 
-  /* "Jugar con otras personas" lleva directo a la pantalla de
-     compartir (ya no hay una pantalla intermedia con una sola
-     tarjeta obligatoria); "Jugar por mi cuenta" lleva a elegir
-     entre las dos actividades individuales. */
+  /* "Jugar con otras personas" lleva directo a la selección de
+     actividad grupal (sin pantalla intermedia que haga spoiler de
+     la dinámica); "Jugar por mi cuenta" lleva a elegir entre las
+     dos actividades individuales. */
   function confirmStageTwoMode() {
     if (!gameState.stageTwoMode) return;
     saveGameState();
     if (gameState.stageTwoMode === 'group') {
-      chooseActivity('share-group', 25);
+      goToScreen(26);
     } else {
       goToScreen(21);
     }
@@ -1031,7 +1024,7 @@
   function createAnotherPrediction() {
     gameState.predictionMode = null;
     gameState.currentRecipient = '';
-    gameState.currentDraft = '';
+    gameState.currentDraft = null;
     gameState.stageTwoMode = null;
     gameState.stageTwoActivity = null;
     resetCurrentChallenge();
@@ -1055,8 +1048,9 @@
 
   function requestHome() {
     var current = gameState.currentScreen;
-    var hasUnsavedDraft = current === 12 &&
-      document.getElementById('prediction-input').value.trim().length > 0;
+    var draft = gameState.currentDraft;
+    var hasUnsavedDraft = current === 12 && !!draft &&
+      !!((draft.year && draft.year.trim()) || (draft.action && draft.action.trim()) || (draft.reason && draft.reason.trim()));
     var hasNameInProgress = NAME_ENTRY_SCREENS.indexOf(current) !== -1;
     var hasChallengeInProgress = CHALLENGE_IN_PROGRESS_SCREENS.indexOf(current) !== -1;
 
@@ -1069,7 +1063,7 @@
   }
 
   function confirmGoHome() {
-    gameState.currentDraft = '';
+    gameState.currentDraft = null;
     gameState.predictionMode = null;
     gameState.currentRecipient = '';
     resetCurrentChallenge();
@@ -1093,12 +1087,45 @@
     goToScreen(1);
     setupImageExportUI();
 
-    var textarea = document.getElementById('prediction-input');
-    textarea.addEventListener('input', function () {
-      gameState.currentDraft = textarea.value;
-      updateSaveButtonState();
-      saveGameState();
-    });
+    var yearInput = document.getElementById('year-input');
+    if (yearInput) {
+      yearInput.addEventListener('input', function () {
+        yearInput.value = yearInput.value.replace(/\D/g, '').slice(0, 4);
+        gameState.currentDraft = gameState.currentDraft || {};
+        gameState.currentDraft.year = yearInput.value;
+        updateSaveButtonState();
+        saveGameState();
+      });
+    }
+    var nameFieldInput = document.getElementById('name-field-input');
+    if (nameFieldInput) {
+      nameFieldInput.addEventListener('input', function () {
+        gameState.currentDraft = gameState.currentDraft || {};
+        gameState.currentDraft.name = nameFieldInput.value;
+        updateSaveButtonState();
+        saveGameState();
+      });
+    }
+    var actionInput = document.getElementById('action-input');
+    if (actionInput) {
+      actionInput.addEventListener('input', function () {
+        autoGrowTextarea(actionInput);
+        gameState.currentDraft = gameState.currentDraft || {};
+        gameState.currentDraft.action = actionInput.value;
+        updateSaveButtonState();
+        saveGameState();
+      });
+    }
+    var reasonInput = document.getElementById('reason-input');
+    if (reasonInput) {
+      reasonInput.addEventListener('input', function () {
+        autoGrowTextarea(reasonInput);
+        gameState.currentDraft = gameState.currentDraft || {};
+        gameState.currentDraft.reason = reasonInput.value;
+        updateSaveButtonState();
+        saveGameState();
+      });
+    }
 
     var selfNameInput = document.getElementById('player-one-name');
     if (selfNameInput) {
@@ -1145,7 +1172,6 @@
         case 'confirm-stage-two-mode': confirmStageTwoMode(); break;
         case 'activity-draw-solo': chooseActivity('draw-solo', 22); break;
         case 'activity-continue-solo': chooseActivity('continue-solo', 23); break;
-        case 'goto-group-selection': goToScreen(26); break;
         case 'activity-defend': chooseActivity('defend', 27); break;
         case 'activity-vote': chooseActivity('vote', 28); break;
         case 'activity-draw-group': chooseActivity('draw-group', 29); break;

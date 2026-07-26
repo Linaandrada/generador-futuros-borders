@@ -631,32 +631,86 @@ img {
   color: var(--color-border);
 }
 
-.note-textarea {
+/* ===== Plantilla de predicción (campos integrados en la oración) =====
+   Cuatro campos reales (año, nombre, qué va a pasar, motivo) sin
+   borde ni fondo propio, para que se lean como parte de una única
+   oración dentro de la tarjeta blanca de "Predicción". El texto fijo
+   ("En", ",", "va a", "porque", ".") no es editable porque es texto
+   estático, no forma parte de ningún campo. */
+.prediction-sentence {
   flex: 1 1 auto;
-  border: none;
-  resize: none;
-  padding: 8px 18px 20px;
+  padding: 20px 18px 24px;
+}
+
+.sentence-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px;
+  margin: 0;
+}
+
+.sentence-line--reason {
+  margin-top: 16px;
+}
+
+.sentence-text {
   font-size: 16px;
-  font-weight: 400;
   line-height: 1.8;
   color: var(--color-text);
-  min-height: 140px;
+  white-space: nowrap;
+}
+
+.sentence-text--period {
+  padding-bottom: 4px;
+}
+
+.sentence-field {
+  border: none;
   background: transparent;
+  font-family: inherit;
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--color-text);
+  padding: 0 2px;
+  margin: 0;
 }
 
-/* Mientras el contenido sea la plantilla sin completar, se ve como
-   guía (gris claro) en vez de contenido ya escrito. El texto no
-   cambia, solo su jerarquía visual. */
-.note-textarea.is-guide-text {
-  color: var(--color-border);
-}
-
-.note-textarea:focus {
+.sentence-field:focus {
   outline: none;
 }
 
-.note-textarea::placeholder {
+.sentence-field::placeholder {
   color: var(--color-border);
+}
+
+.sentence-field--year {
+  flex: 0 0 auto;
+  width: 4.5ch;
+}
+
+.sentence-field--name {
+  flex: 0 1 auto;
+  width: 11ch;
+}
+
+.sentence-field--action,
+.sentence-field--reason {
+  display: block;
+  width: 100%;
+  resize: none;
+  overflow: hidden;
+  min-height: 1.8em;
+}
+
+.sentence-line-with-suffix {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.sentence-line-with-suffix .sentence-field--reason {
+  flex: 1 1 auto;
 }
 
 /* ===== Quote block (finished prediction) ===== */

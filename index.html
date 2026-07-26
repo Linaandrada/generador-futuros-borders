@@ -220,13 +220,24 @@
         <h1 class="title-md">Escribe tu predicción</h1>
         <div class="chip-row" id="write-chip-row"></div>
         <div class="note-card note-card-editable">
-          <label class="note-header" for="prediction-input">Predicción</label>
-          <textarea
-            id="prediction-input"
-            class="note-textarea"
-            maxlength="280"
-            rows="6"
-          ></textarea>
+          <p class="note-header">Predicción</p>
+          <div class="prediction-sentence">
+            <p class="sentence-line">
+              <span class="sentence-text">En</span>
+              <input type="text" id="year-input" class="sentence-field sentence-field--year" inputmode="numeric" placeholder="202_" aria-label="Año" autocomplete="off">
+              <span class="sentence-text">,</span>
+              <input type="text" id="name-field-input" class="sentence-field sentence-field--name" maxlength="20" aria-label="Nombre" autocomplete="off">
+              <span class="sentence-text">va a</span>
+            </p>
+            <textarea id="action-input" class="sentence-field sentence-field--action" rows="1" aria-label="Qué va a pasar" placeholder="qué va a pasar"></textarea>
+            <p class="sentence-line sentence-line--reason">
+              <span class="sentence-text">porque</span>
+            </p>
+            <div class="sentence-line-with-suffix">
+              <textarea id="reason-input" class="sentence-field sentence-field--reason" rows="1" aria-label="Motivo" placeholder="el motivo"></textarea>
+              <span class="sentence-text sentence-text--period">.</span>
+            </div>
+          </div>
         </div>
       </div>
       <div class="button-bar">
@@ -355,31 +366,6 @@
       </div>
       <div class="button-bar">
         <button class="btn btn-primary" data-action="finish-activity">Finalizar</button>
-      </div>
-    </section>
-
-    <!-- SCREEN 25: Jugar con otras personas -->
-    <section class="screen theme-flat-yo" id="screen-25" data-screen="25" aria-label="Jugar con otras personas" hidden>
-      <div class="screen-inner">
-        <header class="nav-row">
-          <span class="handle"><a href="https://www.instagram.com/linaandrada" target="_blank" rel="noopener noreferrer">@linaandrada</a></span>
-          <button type="button" class="logo-home-btn" data-action="request-home" aria-label="Volver al inicio">
-            <img class="logo" src="assets/images/logo2.png" alt="" onerror="this.onerror=null;this.src='assets/images/placeholder.svg'">
-          </button>
-        </header>
-        <button class="back-link" data-action="go-back">&larr; Atrás</button>
-        <h1 class="title-md">Jugar con otras personas</h1>
-        <p class="subtitle">Compartila con el grupo</p>
-        <ol class="instruction-list">
-          <li>Leé la predicción en voz alta para que todas las personas la conozcan.</li>
-          <li>No expliques cómo se te ocurrió. Dejá que cada persona imagine el resto de la historia.</li>
-        </ol>
-        <div class="dino-center">
-          <img src="assets/images/grupo-mesa.png" alt="El dinosaurio mostrándole un dibujo a un alien, que le muestra el suyo" onerror="this.onerror=null;this.src='assets/images/placeholder.svg'">
-        </div>
-      </div>
-      <div class="button-bar">
-        <button class="btn btn-primary" data-action="goto-group-selection">Elegir cómo seguir</button>
       </div>
     </section>
 
