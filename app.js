@@ -5,114 +5,186 @@
      DATA
   ========================================================= */
 
-  /* Cada ítem: { t: texto, f: familia }. La familia evita que
-     tema y contexto queden de la misma familia (frase plana). */
+  /* =========================================================
+     DOCUMENTO EDITORIAL
+     =========================================================
+
+     REGLA MAESTRA
+     Cada variable tiene que ser divertida ANTES de combinarse.
+     Si leída sola no despierta ninguna imagen, no pertenece
+     al universo Borders.
+
+     ---------------------------------------------------------
+     LA PRUEBA DE UNIVERSALIDAD (dos filos)
+     ---------------------------------------------------------
+     El juego es abierto: cada jugador escribe los nombres de las
+     personas sobre las que va a predecir. Puede ser un amigo, la
+     abuela, un compañero de trabajo, un sobrino de nueve años.
+     Nunca sabemos quién es la persona elegida.
+
+     Por eso todo disparador tiene que pasar DOS filtros:
+
+     1. UNIVERSAL EN LA RELACIÓN
+        Cualquier jugador tiene que poder imaginar rápido a la
+        persona elegida dentro de esa situación, sin conocer su
+        vida privada.
+        Falla: "el grupo del secundario" (si no lo conozco, no
+        veo nada). Pasa: "su vecino de arriba".
+
+     2. UNIVERSAL EN LA ETAPA DE LA VIDA
+        Tiene que funcionar igual si la persona elegida tiene
+        nueve años o ochenta.
+        Falla: "su perfil de LinkedIn", "su renuncia".
+        Pasa: "quien le da órdenes", "su heladera".
+
+     Si un ítem falla cualquiera de los dos, no entra.
+
+     ---------------------------------------------------------
+     REGLA DEL POSESIVO (para TOPICS)
+     ---------------------------------------------------------
+     Todo tema tiene que poder llevar "su" adelante sin sonar
+     raro. Eso lo mantiene enganchado a la persona elegida, sea
+     quien sea.
+
+     Si es un personaje suelto sin relación con ella (un político,
+     un vendedor ambulante), no es tema: es un intruso, y va en
+     ELEMENTS.
+
+     Si podría ser una categoría de encuesta ("Viajes", "Amor",
+     "Salud"), tampoco entra. Tiene que ser algo que se pueda
+     señalar con el dedo.
+
+     ---------------------------------------------------------
+     REGLA DEL ADJETIVO (para ELEMENTS)
+     ---------------------------------------------------------
+     No rechazamos la fantasía. Rechazamos el adjetivo que le da
+     personalidad al objeto.
+
+     - Si el adjetivo lo vuelve más FÍSICO (inflable, roto,
+       descartable, chiquito), entra: eso es distopía patética.
+     - Si lo vuelve más SIMPÁTICO (tímido, resentido, educado),
+       no entra: ese chiste ya viene hecho y al jugador no le
+       queda nada por construir.
+
+     Un dinosaurio es fantasía. Un dinosaurio inflable es una
+     pelopincho en un estacionamiento. Esa es la diferencia.
+
+     Como los otros dos ejes son SIEMPRE mundanos, cualquier
+     elemento fantástico cae obligatoriamente en un marco banal:
+     al extraterrestre nunca le toca una nave, le toca la fila
+     del supermercado. La arquitectura deflaciona la fantasía
+     sola. Por eso el eje del intruso puede ser más raro de lo
+     que parecería prudente. Proporción objetivo: ~1 de cada 4.
+
+     ---------------------------------------------------------
+     REGLA DE LA SALA
+     ---------------------------------------------------------
+     Esto se juega en un cumpleaños. Evitamos material que pueda
+     enfriar la mesa aunque sea gracioso en abstracto: velorios,
+     hospitales, enfermedad, y política partidaria.
+
+     ---------------------------------------------------------
+     PREGUNTAS PARA ADMITIR UN ÍTEM
+     ---------------------------------------------------------
+     1. ¿Produce una imagen mental inmediata?
+     2. ¿Tiene tensión implícita (poder, vergüenza, deuda, deseo)?
+     3. ¿Invita a exagerarlo?
+     4. ¿Funciona con cualquier persona elegida, de cualquier edad?
+     5. ¿Deja algo por construir, o ya trae el chiste puesto?
+
+     Preferimos 26 excelentes a 80 correctas. Con 26 por eje y
+     4 tiradas por partida, el mazo aguanta 13 partidas sin
+     repetir ningún ítem.
+  ========================================================= */
   var TOPICS = [
-    { t: 'Su ex',                                f: 'amor' },
-    { t: 'El grupo de WhatsApp de la familia',   f: 'familia' },
-    { t: 'Su jefe',                              f: 'trabajo' },
-    { t: 'Su terapeuta',                         f: 'cuerpo' },
-    { t: 'Mudarse',                              f: 'casa' },
-    { t: 'Su cuenta bancaria',                   f: 'plata' },
-    { t: 'Sus vecinos',                          f: 'casa' },
-    { t: 'Una entrevista de trabajo',            f: 'trabajo' },
-    { t: 'El gimnasio',                          f: 'cuerpo' },
-    { t: 'Un casamiento ajeno',                  f: 'social' },
-    { t: 'Su tatuaje',                           f: 'cuerpo' },
+    { t: 'Su vecino de arriba',                  f: 'casa' },
+    { t: 'El portero de su edificio',            f: 'casa' },
+    { t: 'La reunión de consorcio',              f: 'casa' },
     { t: 'Su heladera',                          f: 'casa' },
-    { t: 'Aprender un idioma',                   f: 'ocio' },
+    { t: 'Su mudanza',                           f: 'casa' },
+    { t: 'Quien le da órdenes',                  f: 'trabajo' },
+    { t: 'Lo que hace todos los días a las ocho',f: 'trabajo' },
+    { t: 'Su peor decisión reciente',            f: 'trabajo' },
+    { t: 'La plata que le deben',                 f: 'plata' },
+    { t: 'Su herencia',                          f: 'plata' },
+    { t: 'Lo que compró y nunca usó',            f: 'plata' },
+    { t: 'Su ex',                                f: 'amor' },
+    { t: 'Su cita a ciegas',                     f: 'amor' },
+    { t: 'La persona que le gusta',               f: 'amor' },
+    { t: 'Su familia política',                  f: 'familia' },
+    { t: 'El grupo de WhatsApp de la familia',   f: 'familia' },
+    { t: 'Su apodo familiar',                    f: 'familia' },
     { t: 'Su corte de pelo',                     f: 'cuerpo' },
-    { t: 'Una cita a ciegas',                    f: 'amor' },
-    { t: 'El asado familiar',                    f: 'familia' },
-    { t: 'Su primer sueldo grande',              f: 'plata' },
-    { t: 'Un emprendimiento',                    f: 'trabajo' },
-    { t: 'Su perfil de LinkedIn',                f: 'trabajo' },
-    { t: 'Una herencia inesperada',              f: 'plata' },
+    { t: 'Su tatuaje',                           f: 'cuerpo' },
+    { t: 'Lo que le da vergüenza',                f: 'cuerpo' },
+    { t: 'Su celular viejo',                     f: 'tech' },
+    { t: 'Lo que postea a las tres de la mañana',f: 'tech' },
     { t: 'Su horóscopo',                         f: 'ocio' },
-    { t: 'Su playlist',                          f: 'ocio' },
-    { t: 'Un examen',                            f: 'trabajo' },
-    { t: 'Su casa nueva',                        f: 'casa' },
-    { t: 'Un vuelo con escala',                  f: 'viaje' },
-    { t: 'Su celular',                           f: 'tech' },
-    { t: 'Su cuenta de Instagram',               f: 'tech' },
-    { t: 'Un préstamo',                          f: 'plata' },
-    { t: 'La lista de invitados',                f: 'social' },
     { t: 'Su documento vencido',                 f: 'tramite' },
-    { t: 'Un grupo de amigos del secundario',    f: 'social' },
-    { t: 'Su plan de vacaciones',                f: 'viaje' }
+    { t: 'Su plan de vacaciones',                f: 'viaje' },
+    { t: 'Su reputación',                        f: 'social' }
   ];
 
-  /* El intruso absurdo. Familia 'none': no compite con nada. */
   var ELEMENTS = [
+    /* núcleo extraño sin remate */
     { t: 'Un pato',                              f: 'none' },
-    { t: 'Un cactus con nombre propio',          f: 'none' },
-    { t: 'Una media perdida',                    f: 'none' },
-    { t: 'Un mensaje enviado por error',         f: 'none' },
-    { t: 'Una tostadora',                        f: 'none' },
-    { t: 'Glitter',                              f: 'none' },
-    { t: 'Un extraterrestre muy educado',        f: 'none' },
-    { t: 'Un dinosaurio inflable',               f: 'none' },
-    { t: 'Una paloma con actitud',                f: 'none' },
-    { t: 'Un regalo inexplicable',               f: 'none' },
-    { t: 'Una peluca',                           f: 'none' },
-    { t: 'Un audio de catorce minutos',          f: 'none' },
-    { t: 'Un fantasma tímido',                   f: 'none' },
-    { t: 'Un disfraz de gallina',                f: 'none' },
-    { t: 'Una máquina que no sirve para nada',   f: 'none' },
-    { t: 'Un tutorial mal traducido',            f: 'none' },
-    { t: 'Una piñata',                           f: 'none' },
-    { t: 'Un robot doméstico resentido',         f: 'none' },
-    { t: 'Un meteorito muy chiquito',            f: 'none' },
-    { t: 'Una mascota ajena',                    f: 'none' },
-    { t: 'Un contrato firmado sin leer',         f: 'none' },
-    { t: 'Una llave que no abre nada',           f: 'none' },
-    { t: 'Un tupper que nadie reclama',          f: 'none' },
-    { t: 'Una bufanda tejida a mano',            f: 'none' },
-    { t: 'Un caracol',                           f: 'none' },
-    { t: 'Un espejo que responde tarde',         f: 'none' },
-    { t: 'Una alarma que suena sola',            f: 'none' },
-    { t: 'Un carrito de supermercado',           f: 'none' },
-    { t: 'Una carta que llegó veinte años tarde',f: 'none' },
-    { t: 'Un sombrero enorme',                   f: 'none' },
+    { t: 'Un maniquí',                           f: 'none' },
     { t: 'Una planta que se mueve sola',         f: 'none' },
-    { t: 'Un trofeo de algo que nadie ganó',     f: 'none' }
+    { t: 'Un caracol',                           f: 'none' },
+    /* fantasía desnuda: sustantivo solo, sin personalidad */
+    { t: 'Un fantasma',                          f: 'none' },
+    { t: 'Un extraterrestre',                    f: 'none' },
+    { t: 'Un robot',                             f: 'none' },
+    /* fantasía deflacionada: el adjetivo la baja a la realidad */
+    { t: 'Un dinosaurio inflable',               f: 'none' },
+    { t: 'Un meteorito muy chiquito',            f: 'none' },
+    { t: 'Un inflable gigante',                  f: 'none' },
+    /* objetos cotidianos vueltos absurdamente importantes */
+    { t: 'Una bufanda tejida a mano',            f: 'none' },
+    { t: 'Un tupper que nadie reclama',          f: 'none' },
+    { t: 'Una tostadora',                        f: 'none' },
+    { t: 'Un paquete sin remitente',             f: 'none' },
+    { t: 'Una llave que no abre nada',           f: 'none' },
+    { t: 'Un trofeo de algo que nadie ganó',     f: 'none' },
+    { t: 'Una carta que llegó veinte años tarde',f: 'none' },
+    { t: 'Un contrato firmado sin leer',         f: 'none' },
+    { t: 'Una cámara descartable',               f: 'none' },
+    { t: 'Un paraguas roto',                     f: 'none' },
+    { t: 'Un bidón lleno de algo',               f: 'none' },
+    { t: 'Una escoba',                           f: 'none' },
+    { t: 'Un megáfono',                          f: 'none' },
+    { t: 'Una media perdida',                    f: 'none' },
+    { t: 'Un audio de catorce minutos',          f: 'none' },
+    { t: 'Glitter',                              f: 'none' }
   ];
 
-  /* Siempre un lugar cotidiano y concreto, tiene que caber en
-     una foto. Se evitan hospitales/velatorios y similares. */
   var CONTEXTS = [
     { t: 'En un ascensor',                       f: 'casa' },
+    { t: 'En una reunión de consorcio',          f: 'casa' },
+    { t: 'En plena mudanza',                     f: 'casa' },
+    { t: 'En un estacionamiento',                f: 'viaje' },
+    { t: 'En un peaje',                          f: 'viaje' },
+    { t: 'En un colectivo lleno',                f: 'viaje' },
+    { t: 'En un aeropuerto a las cinco de la mañana', f: 'viaje' },
+    { t: 'En un hotel barato',                   f: 'viaje' },
+    { t: 'En una sala de espera',                f: 'tramite' },
+    { t: 'En un locutorio',                      f: 'tramite' },
+    { t: 'En un examen de manejo',               f: 'tramite' },
+    { t: 'En un call center',                    f: 'trabajo' },
+    { t: 'En una videollamada',                  f: 'trabajo' },
+    { t: 'En un karaoke',                        f: 'ocio' },
+    { t: 'En una clase de yoga',                 f: 'cuerpo' },
+    { t: 'En un probador de ropa',               f: 'cuerpo' },
+    { t: 'En una peluquería',                    f: 'cuerpo' },
     { t: 'En la fila del supermercado',          f: 'social' },
-    { t: 'En un casamiento',                     f: 'social' },
-    { t: 'En una videollamada de trabajo',       f: 'trabajo' },
+    { t: 'En un casamiento ajeno',               f: 'social' },
     { t: 'En un cumpleaños infantil',            f: 'social' },
     { t: 'En un baño público',                   f: 'social' },
-    { t: 'En un taxi',                           f: 'viaje' },
-    { t: 'Durante un apagón',                    f: 'casa' },
-    { t: 'En una sala de espera',                f: 'tramite' },
-    { t: 'En el vestuario del gimnasio',         f: 'cuerpo' },
-    { t: 'En un aeropuerto a las cinco de la mañana', f: 'viaje' },
-    { t: 'En un asado',                          f: 'familia' },
-    { t: 'En una reunión de consorcio',          f: 'casa' },
-    { t: 'En un karaoke',                        f: 'ocio' },
-    { t: 'En la puerta de un cajero',            f: 'plata' },
-    { t: 'En plena mudanza',                     f: 'casa' },
-    { t: 'En un colectivo lleno',                f: 'viaje' },
-    { t: 'En una terraza',                       f: 'ocio' },
-    { t: 'En un probador de ropa',               f: 'cuerpo' },
-    { t: 'En un hotel barato',                   f: 'viaje' },
-    { t: 'En un examen de manejo',               f: 'tramite' },
-    { t: 'En la playa en temporada baja',        f: 'viaje' },
-    { t: 'En una peluquería',                    f: 'cuerpo' },
-    { t: 'En un shopping que está cerrando',     f: 'social' },
+    { t: 'En una entrega de premios',            f: 'social' },
     { t: 'En una fiesta que ya terminó',         f: 'social' },
-    { t: 'En un estacionamiento',                f: 'viaje' },
-    { t: 'En una clase de yoga',                 f: 'cuerpo' },
-    { t: 'En la cola del banco',                 f: 'plata' },
-    { t: 'En una cena familiar',                 f: 'familia' },
-    { t: 'En un locutorio',                      f: 'tramite' },
-    { t: 'En el fondo de un grupo de WhatsApp',  f: 'tech' },
-    { t: 'En una entrega de premios',            f: 'social' }
+    { t: 'En un shopping que está cerrando',     f: 'social' },
+    { t: 'En la puerta de un cajero',            f: 'plata' },
+    { t: 'En un asado familiar',                 f: 'familia' }
   ];
 
   /* Arrays planos de texto para el carrusel (runCarousel espera strings). */
@@ -144,7 +216,7 @@
     currentChallenge: { topic: null, element: null, context: null },
     predictions: [],
     carouselFinished: false,
-    draftText: '',
+    drafts: { 'player-1': '', 'player-2': '' },
     sessionId: null
   };
 
@@ -282,7 +354,7 @@
       gameState.completedTargets = Array.isArray(saved.completedTargets) ? saved.completedTargets : [];
       gameState.currentChallenge = saved.currentChallenge || { topic: null, element: null, context: null };
       gameState.predictions = Array.isArray(saved.predictions) ? saved.predictions : [];
-      gameState.draftText = typeof saved.draftText === 'string' ? saved.draftText : '';
+      gameState.drafts = normalizeDrafts(saved.drafts);
       gameState.currentScreen = typeof saved.currentScreen === 'number' ? saved.currentScreen : 1;
       gameState.sessionId = typeof saved.sessionId === 'string' ? saved.sessionId : null;
     } catch (e) {
@@ -303,6 +375,18 @@
       out.push({ id: defaults[i].id, name: name });
     }
     return out;
+  }
+
+  /* Migración equivalente para los borradores por jugador: si el
+     localStorage viene de antes de este cambio (sin `drafts`, o con
+     el viejo `draftText` compartido), arranca con los dos vacíos. */
+  function normalizeDrafts(raw) {
+    var defaults = { 'player-1': '', 'player-2': '' };
+    if (!raw || typeof raw !== 'object') return defaults;
+    return {
+      'player-1': typeof raw['player-1'] === 'string' ? raw['player-1'] : '',
+      'player-2': typeof raw['player-2'] === 'string' ? raw['player-2'] : ''
+    };
   }
 
   /* =========================================================
@@ -388,8 +472,8 @@
      persistencia en localStorage para no repetir entre partidas.
   ========================================================= */
 
-  var BAGS_KEY = 'gfb_bags_v1';
-  var SEEN_KEY = 'gfb_seen_v1';
+  var BAGS_KEY = 'gfb_bags_v3';
+  var SEEN_KEY = 'gfb_seen_v3';
   var SEEN_MAX = 60; // cuántas ternas recordamos antes de olvidar las viejas
   var CONTEXT_RETRY_LIMIT = 40; // más que el tamaño del mazo de contexts
 
@@ -477,8 +561,8 @@
   }
 
   /* Saca el índice de una carta puntual del mazo, si está ahí.
-     La usa el fallback determinístico para no dejar la carta
-     duplicada (en el mazo y en uso) tras un pickValidContext. */
+     La usa el fallback determinístico (forceValidContext) para no
+     dejar la carta duplicada entre el mazo y la que ya está en uso. */
   function removeFromBag(axis, item) {
     var pool = poolFor(axis);
     for (var i = 0; i < pool.length; i++) {
@@ -525,26 +609,33 @@
 
   /* topic y element se sortean una única vez por generación (nunca
      entran en conflicto entre sí). Solo context se reintenta, ya
-     que es el único eje que puede colisionar con topic. */
-  function pickValidContext(topic, element) {
+     que es el único eje que puede colisionar con topic. Los
+     contextos rechazados se acumulan y vuelven al mazo recién al
+     final (no se pierden, solo pierden el turno). Si el tope de
+     intentos no alcanza, el barrido determinístico de
+     forceValidContext garantiza que igual nunca se acepte una
+     colisión de familia ni un bucle infinito. */
+  function generateChallenge() {
+    var topic = drawFrom('topic');
+    var element = drawFrom('element');
     var context = drawFrom('context');
-    var attempts = 1;
+    var rejected = [];
+    var attempts = 0;
+
     while (isBadCombo(topic, element, context) && attempts < CONTEXT_RETRY_LIMIT) {
-      putBack('context', context);
+      rejected.push(context);
       context = drawFrom('context');
       attempts++;
     }
+
+    for (var i = 0; i < rejected.length; i++) {
+      putBack('context', rejected[i]);
+    }
+
     if (isBadCombo(topic, element, context)) {
       putBack('context', context);
       context = forceValidContext(topic, element);
     }
-    return context;
-  }
-
-  function generateChallenge() {
-    var topic = drawFrom('topic');
-    var element = drawFrom('element');
-    var context = pickValidContext(topic, element);
 
     var challenge = { topic: topic.t, element: element.t, context: context.t };
     seenCombos.push(comboKey(challenge));
@@ -556,6 +647,35 @@
   function resetCurrentChallenge() {
     gameState.currentChallenge = { topic: null, element: null, context: null };
     gameState.carouselFinished = false;
+  }
+
+  /* =========================================================
+     PREDICTION TEMPLATE
+  ========================================================= */
+
+  function buildPredictionTemplate(name) {
+    return 'En 202__, ' + name + ' va a...\nporque ___________________.';
+  }
+
+  /* Reduce el texto a una firma comparable: el año (escrito o en
+     blanco) cuenta como un mismo token, cualquier tira de guiones
+     bajos se colapsa a una sola, y se ignoran signos y espacios.
+     Así "completar el año" o "tocar los guiones" nunca cuenta como
+     predicción real. */
+  function normalizeForTemplateCheck(text) {
+    return (text || '')
+      .replace(/^En\s+202[\d_]*,/i, 'En 202X,')
+      .replace(/_+/g, '_')
+      .replace(/[.,!¡¿?;:\-–—'"“”‘’…]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .toLowerCase();
+  }
+
+  /* La comparación siempre reconstruye la plantilla con el nombre
+     dinámico del jugador actual: nunca depende de un nombre fijo. */
+  function isTemplateUnfilled(value, name) {
+    return normalizeForTemplateCheck(value) === normalizeForTemplateCheck(buildPredictionTemplate(name));
   }
 
   /* =========================================================
@@ -749,7 +869,7 @@
     gameState.completedTargets = [];
     gameState.sessionId = 'p-' + Date.now();
     resetCurrentChallenge();
-    gameState.draftText = '';
+    gameState.drafts = { 'player-1': '', 'player-2': '' };
     saveGameState();
 
     var nameOneInput = document.getElementById('player-one-name');
@@ -848,16 +968,36 @@
   function goToWriteScreen() {
     renderChips(document.getElementById('write-chip-row'), gameState.currentChallenge);
     var textarea = document.getElementById('prediction-input');
-    textarea.value = gameState.draftText || '';
+    var existingDraft = gameState.drafts[gameState.currentTarget] || '';
+    var isFirstEntry = existingDraft === '';
+    var value = existingDraft;
+
+    if (isFirstEntry) {
+      value = buildPredictionTemplate(getPlayerName(gameState.currentTarget));
+      gameState.drafts[gameState.currentTarget] = value;
+      saveGameState();
+    }
+
+    textarea.value = value;
     updateSaveButtonState();
     goToScreen(12);
-    setTimeout(function () { textarea.focus(); }, 300);
+    setTimeout(function () {
+      textarea.focus();
+      if (isFirstEntry && typeof textarea.setSelectionRange === 'function') {
+        var cursorPos = value.indexOf('_');
+        if (cursorPos === -1) cursorPos = value.length;
+        textarea.setSelectionRange(cursorPos, cursorPos);
+      }
+    }, 300);
   }
 
   function updateSaveButtonState() {
     var textarea = document.getElementById('prediction-input');
     var btn = document.getElementById('save-prediction-btn');
-    btn.disabled = textarea.value.trim().length === 0;
+    var value = textarea.value;
+    var isEmpty = value.trim().length === 0;
+    var isUnfilledTemplate = !isEmpty && isTemplateUnfilled(value, getPlayerName(gameState.currentTarget));
+    btn.disabled = isEmpty || isUnfilledTemplate;
   }
 
   function savePrediction() {
@@ -886,7 +1026,7 @@
 
     gameState.predictions.push(prediction);
     gameState.completedTargets.push(gameState.currentTarget);
-    gameState.draftText = '';
+    gameState.drafts[gameState.currentTarget] = '';
     saveGameState();
 
     document.getElementById('saved-prediction-text').textContent = '“' + text + '”';
@@ -977,7 +1117,7 @@
 
     var textarea = document.getElementById('prediction-input');
     textarea.addEventListener('input', function () {
-      gameState.draftText = textarea.value;
+      gameState.drafts[gameState.currentTarget] = textarea.value;
       updateSaveButtonState();
       saveGameState();
     });

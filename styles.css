@@ -94,11 +94,8 @@ img {
 }
 
 .logo {
-  font-weight: 800;
-  font-size: 14px;
-  color: #3a3a3a;
-  text-align: right;
-  line-height: 1.1;
+  height: 30px;
+  width: auto;
 }
 
 .handle a {
@@ -152,6 +149,13 @@ img {
   line-height: 1.05;
   margin: 4px 0 4px;
   color: #3a3a3a;
+}
+
+.title-logo {
+  display: block;
+  width: 65%;
+  max-width: 240px;
+  margin: 4px auto;
 }
 
 .handwritten {
@@ -737,7 +741,7 @@ img {
 
 /* ===== Small screens ===== */
 @media (max-width: 340px) {
-  .title-block { font-size: 28px; }
+  .title-logo { width: 58%; }
   .quote-block { font-size: 20px; }
 }
 
