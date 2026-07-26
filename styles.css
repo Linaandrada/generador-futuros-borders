@@ -916,3 +916,28 @@ img {
   .phone { min-height: 560px; }
   .hero-illustration img { width: 50%; }
 }
+
+/* ===== Mobile: pantalla completa, sin efecto de tarjeta =====
+   Por debajo de este ancho asumimos que es un dispositivo móvil real
+   (no una ventana de escritorio angosta): la app ocupa toda la
+   pantalla y desaparece el fondo oscuro alrededor. El efecto de
+   tarjeta se conserva únicamente en pantallas más anchas. */
+@media (max-width: 600px) {
+  .app-shell {
+    padding: 0;
+    background: var(--color-background);
+  }
+
+  .phone {
+    width: 100%;
+    max-width: none;
+    min-height: 100vh;
+    min-height: 100dvh;
+    height: 100vh;
+    height: 100dvh;
+    max-height: none;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+  }
+}
