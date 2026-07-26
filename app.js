@@ -202,21 +202,25 @@
 
   /* =========================================================
      STATE
+
+     Cada recorrido crea una sola predicción (no hay segundo
+     jugador ni segunda predicción obligatoria). `selfName` es lo
+     único que persiste entre recorridos; el resto del estado de
+     "predicción en curso" se limpia en cada "Crear otra predicción".
   ========================================================= */
 
   var gameState = {
     currentScreen: 1,
-    players: [
-      { id: 'player-1', name: '' },
-      { id: 'player-2', name: '' }
-    ],
-    firstTarget: null,
-    currentTarget: null,
-    completedTargets: [],
+    selfName: '',                  // nombre propio, persistente entre recorridos
+    predictionMode: null,          // 'self' | 'other'
+    currentRecipient: '',          // nombre a mostrar en la predicción actual
     currentChallenge: { topic: null, element: null, context: null },
-    predictions: [],
+    currentDraft: '',              // borrador de la predicción en curso
+    currentPrediction: null,       // última predicción creada: { id, recipient, mode, challenge, text, sessionId, date }
+    stageTwoMode: null,            // 'solo' | 'group'
+    stageTwoActivity: null,        // 'draw-solo' | 'continue-solo' | 'share-group' | 'defend' | 'vote' | 'draw-group'
+    predictions: [],               // historial persistido de predicciones
     carouselFinished: false,
-    drafts: { 'player-1': '', 'player-2': '' },
     sessionId: null
   };
 
@@ -224,6 +228,16 @@
   var isSaving = false;
   var pendingHomeAction = null;
   var isExportingImage = false;
+
+  /* Pantallas donde, si el usuario pide "Volver al inicio", hay
+     contenido en curso sin guardar (nombre en progreso o desafío
+     ya generado / predicción todavía no guardada). */
+  var NAME_ENTRY_SCREENS = [18, 19];
+  var CHALLENGE_IN_PROGRESS_SCREENS = [10, 11, 12];
+
+  /* Pantallas de actividad de la Etapa 2 que muestran un resumen
+     de la última predicción creada. */
+  var RECAP_SCREENS = [22, 23, 27, 28, 29];
 
   /* =========================================================
      PREDICTION IMAGE EXPORT
@@ -342,51 +356,32 @@
     }
   }
 
+  /* Migración: si el localStorage viene de una versión anterior
+     (sin estos campos, o con la estructura vieja de dos jugadores),
+     cada campo nuevo arranca en su valor por defecto en vez de
+     romper el arranque. Los datos viejos de `predictions` no se
+     tocan ni se transforman: simplemente no se muestran en ningún
+     listado (la app ya no tiene una vista de historial visible). */
   function loadGameState() {
     try {
       var raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return;
       var saved = JSON.parse(raw);
       if (!saved || typeof saved !== 'object') return;
-      gameState.players = normalizePlayers(saved.players);
-      gameState.firstTarget = saved.firstTarget || null;
-      gameState.currentTarget = saved.currentTarget || null;
-      gameState.completedTargets = Array.isArray(saved.completedTargets) ? saved.completedTargets : [];
+      gameState.selfName = typeof saved.selfName === 'string' ? saved.selfName : '';
+      gameState.predictionMode = (saved.predictionMode === 'self' || saved.predictionMode === 'other') ? saved.predictionMode : null;
+      gameState.currentRecipient = typeof saved.currentRecipient === 'string' ? saved.currentRecipient : '';
       gameState.currentChallenge = saved.currentChallenge || { topic: null, element: null, context: null };
+      gameState.currentDraft = typeof saved.currentDraft === 'string' ? saved.currentDraft : '';
+      gameState.currentPrediction = (saved.currentPrediction && typeof saved.currentPrediction === 'object') ? saved.currentPrediction : null;
+      gameState.stageTwoMode = typeof saved.stageTwoMode === 'string' ? saved.stageTwoMode : null;
+      gameState.stageTwoActivity = typeof saved.stageTwoActivity === 'string' ? saved.stageTwoActivity : null;
       gameState.predictions = Array.isArray(saved.predictions) ? saved.predictions : [];
-      gameState.drafts = normalizeDrafts(saved.drafts);
       gameState.currentScreen = typeof saved.currentScreen === 'number' ? saved.currentScreen : 1;
       gameState.sessionId = typeof saved.sessionId === 'string' ? saved.sessionId : null;
     } catch (e) {
       /* corrupted state — start fresh */
     }
-  }
-
-  /* Si el localStorage viene de una versión anterior (sin `players`,
-     o con datos corruptos), devuelve el par por defecto en vez de
-     romper el arranque. Los datos viejos de predicciones no se tocan. */
-  function normalizePlayers(raw) {
-    var defaults = [{ id: 'player-1', name: '' }, { id: 'player-2', name: '' }];
-    if (!Array.isArray(raw) || raw.length !== 2) return defaults;
-    var out = [];
-    for (var i = 0; i < 2; i++) {
-      var entry = raw[i];
-      var name = (entry && typeof entry.name === 'string') ? entry.name : '';
-      out.push({ id: defaults[i].id, name: name });
-    }
-    return out;
-  }
-
-  /* Migración equivalente para los borradores por jugador: si el
-     localStorage viene de antes de este cambio (sin `drafts`, o con
-     el viejo `draftText` compartido), arranca con los dos vacíos. */
-  function normalizeDrafts(raw) {
-    var defaults = { 'player-1': '', 'player-2': '' };
-    if (!raw || typeof raw !== 'object') return defaults;
-    return {
-      'player-1': typeof raw['player-1'] === 'string' ? raw['player-1'] : '',
-      'player-2': typeof raw['player-2'] === 'string' ? raw['player-2'] : ''
-    };
   }
 
   /* =========================================================
@@ -401,45 +396,24 @@
     return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }
 
-  function getPlayer(id) {
-    for (var i = 0; i < gameState.players.length; i++) {
-      if (gameState.players[i].id === id) return gameState.players[i];
-    }
-    return null;
-  }
+  var NAME_MAX = 20;
+  var NAME_PATTERN = /^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$/;
 
-  function getPlayerName(id) {
-    var player = getPlayer(id);
-    return player ? player.name : '';
-  }
-
-  function otherTarget(target) {
-    return target === 'player-1' ? 'player-2' : 'player-1';
-  }
-
-  var PLAYER_NAME_MAX = 20;
-  var PLAYER_NAME_PATTERN = /^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$/;
-
-  function sanitizePlayerName(raw) {
+  function sanitizeName(raw) {
     return (raw || '').trim();
   }
 
-  /* Devuelve { valid, name, error }. `otherName` es el nombre ya
-     cargado del otro jugador (o null si todavía no existe), para
-     poder rechazar nombres duplicados. */
-  function validatePlayerName(raw, otherName) {
-    var name = sanitizePlayerName(raw);
+  /* Devuelve { valid, name, error }. */
+  function validateName(raw) {
+    var name = sanitizeName(raw);
     if (!name) {
       return { valid: false, error: 'Escribí un nombre para continuar.' };
     }
-    if (name.length > PLAYER_NAME_MAX) {
-      return { valid: false, error: 'Máximo ' + PLAYER_NAME_MAX + ' caracteres.' };
+    if (name.length > NAME_MAX) {
+      return { valid: false, error: 'Máximo ' + NAME_MAX + ' caracteres.' };
     }
-    if (!PLAYER_NAME_PATTERN.test(name)) {
+    if (!NAME_PATTERN.test(name)) {
       return { valid: false, error: 'Usá solo letras, espacios, apóstrofes o guiones.' };
-    }
-    if (otherName && name.toLowerCase() === sanitizePlayerName(otherName).toLowerCase()) {
-      return { valid: false, error: 'Los dos nombres no pueden ser iguales.' };
     }
     return { valid: true, name: name, error: null };
   }
@@ -673,7 +647,7 @@
   }
 
   /* La comparación siempre reconstruye la plantilla con el nombre
-     dinámico del jugador actual: nunca depende de un nombre fijo. */
+     dinámico del destinatario actual: nunca depende de un nombre fijo. */
   function isTemplateUnfilled(value, name) {
     return normalizeForTemplateCheck(value) === normalizeForTemplateCheck(buildPredictionTemplate(name));
   }
@@ -765,21 +739,14 @@
       '<span class="chip chip-context">' + challenge.context + '</span>';
   }
 
-  function renderSummary() {
-    var list = document.getElementById('summary-list');
-    list.innerHTML = '';
-    var currentSessionPredictions = gameState.predictions.filter(function (p) {
-      return p.session === gameState.sessionId;
-    });
-    currentSessionPredictions.forEach(function (p) {
-      var card = document.createElement('div');
-      card.className = 'summary-card';
-      card.innerHTML =
-        '<p class="note-header">Predicción <span class="summary-target">' + p.target + '</span></p>' +
-        '<p class="summary-text"></p>';
-      card.querySelector('.summary-text').textContent = p.text;
-      list.appendChild(card);
-    });
+  /* Todas las pantallas de actividad de la Etapa 2 muestran la
+     última predicción creada (gameState.currentPrediction), nunca
+     generan ni modifican una predicción nueva. */
+  function renderPredictionRecap(screenNumber) {
+    var el = document.querySelector('#screen-' + screenNumber + ' .prediction-recap-text');
+    if (el && gameState.currentPrediction) {
+      el.textContent = '“' + gameState.currentPrediction.text + '”';
+    }
   }
 
   /* =========================================================
@@ -803,11 +770,11 @@
     }
     gameState.currentScreen = n;
     saveGameState();
-    if (n === 9) renderPlayerSelectOptions();
+    if (RECAP_SCREENS.indexOf(n) !== -1) renderPredictionRecap(n);
   }
 
   /* "Atrás": retrocede exactamente un paso siguiendo el recorrido
-     real (no reinicia nada, no borra nombres ni predicciones). */
+     real (no reinicia nada, no borra nombre, desafío ni borrador). */
   function goBack() {
     var previous = screenHistory.pop();
     if (previous == null) {
@@ -815,26 +782,6 @@
       return;
     }
     goToScreen(previous, true);
-  }
-
-  function applyRealTheme(target) {
-    /* Tema estable por jugador (player-1 / player-2), no por quién
-       empieza primero: cada persona conserva su color toda la partida. */
-    var isPlayerOne = target === 'player-1';
-    ['screen-10', 'screen-11', 'screen-12'].forEach(function (id) {
-      var el = document.getElementById(id);
-      if (!el) return;
-      el.classList.toggle('theme-bg-yo', !isPlayerOne);
-      el.classList.toggle('theme-bg-lina', isPlayerOne);
-    });
-    ['screen-13', 'screen-14'].forEach(function (id) {
-      var el = document.getElementById(id);
-      if (!el) return;
-      el.classList.toggle('theme-flat-yo', !isPlayerOne);
-      el.classList.toggle('theme-flat-lina', isPlayerOne);
-    });
-    var card = document.getElementById('real-challenge-card');
-    if (card) card.classList.toggle('theme-yo', !isPlayerOne);
   }
 
   function setRadioSelection(cards, selectedCard) {
@@ -855,96 +802,95 @@
     goToScreen(2);
   }
 
-  function goToRealGameIntro() {
-    goToScreen(8);
-  }
-
-  function startRealGame() {
-    gameState.players = [
-      { id: 'player-1', name: '' },
-      { id: 'player-2', name: '' }
-    ];
-    gameState.firstTarget = null;
-    gameState.currentTarget = null;
-    gameState.completedTargets = [];
-    gameState.sessionId = 'p-' + Date.now();
+  /* "Crear una predicción" (onboarding): arranca un recorrido nuevo. No toca selfName,
+     el historial de predicciones, ni los mazos del generador. */
+  function startNewPredictionFlow() {
+    gameState.predictionMode = null;
+    gameState.currentRecipient = '';
+    gameState.currentDraft = '';
+    gameState.stageTwoMode = null;
+    gameState.stageTwoActivity = null;
     resetCurrentChallenge();
-    gameState.drafts = { 'player-1': '', 'player-2': '' };
+    gameState.sessionId = 'p-' + Date.now();
     saveGameState();
 
-    var nameOneInput = document.getElementById('player-one-name');
-    if (nameOneInput) nameOneInput.value = '';
-    hideFieldError('player-one-error');
-    var nameTwoInput = document.getElementById('player-two-name');
-    if (nameTwoInput) nameTwoInput.value = '';
-    hideFieldError('player-two-error');
-
-    var cards = $all('.option-card', document.getElementById('screen-9'));
-    setRadioSelection(cards, null);
-    document.getElementById('target-continue-btn').disabled = true;
-    goToScreen(18);
+    resetRecipientSelector();
+    resetStageTwoSelector();
+    goToScreen(9);
   }
 
-  function confirmPlayerOneName() {
+  function resetRecipientSelector() {
+    var cards = $all('.option-card', document.getElementById('screen-9'));
+    setRadioSelection(cards, null);
+    document.getElementById('recipient-continue-btn').disabled = true;
+  }
+
+  function resetStageTwoSelector() {
+    var cards = $all('.option-card', document.getElementById('screen-20'));
+    setRadioSelection(cards, null);
+    document.getElementById('stage-two-continue-btn').disabled = true;
+  }
+
+  function selectRecipientMode(mode, clickedCard) {
+    var cards = $all('.option-card', document.getElementById('screen-9'));
+    setRadioSelection(cards, clickedCard);
+    gameState.predictionMode = mode;
+    document.getElementById('recipient-continue-btn').disabled = false;
+  }
+
+  function confirmRecipientMode() {
+    if (!gameState.predictionMode) return;
+    saveGameState();
+    if (gameState.predictionMode === 'self') {
+      var selfInput = document.getElementById('player-one-name');
+      selfInput.value = gameState.selfName || '';
+      hideFieldError('player-one-error');
+      goToScreen(18);
+    } else {
+      var otherInput = document.getElementById('player-two-name');
+      otherInput.value = '';
+      hideFieldError('player-two-error');
+      goToScreen(19);
+    }
+  }
+
+  function confirmSelfName() {
     var input = document.getElementById('player-one-name');
-    var result = validatePlayerName(input.value, null);
+    var result = validateName(input.value);
     if (!result.valid) {
       showFieldError('player-one-error', result.error);
       return;
     }
     hideFieldError('player-one-error');
-    gameState.players[0].name = result.name;
+    gameState.selfName = result.name;
+    gameState.currentRecipient = result.name;
     input.value = result.name;
     saveGameState();
-    goToScreen(19);
+    generateAndAnimateChallenge();
   }
 
-  function confirmPlayerTwoName() {
+  function confirmOtherName() {
     var input = document.getElementById('player-two-name');
-    var result = validatePlayerName(input.value, gameState.players[0].name);
+    var result = validateName(input.value);
     if (!result.valid) {
       showFieldError('player-two-error', result.error);
       return;
     }
     hideFieldError('player-two-error');
-    gameState.players[1].name = result.name;
+    gameState.currentRecipient = result.name;
     input.value = result.name;
     saveGameState();
-    goToScreen(9);
+    generateAndAnimateChallenge();
   }
 
-  function renderPlayerSelectOptions() {
-    var container = document.getElementById('real-target-options');
-    if (!container) return;
-    $all('.option-player-name', container).forEach(function (el) {
-      el.textContent = getPlayerName(el.dataset.playerId);
-    });
-    var cards = $all('.option-card', container);
-    var selected = null;
-    if (gameState.currentTarget) {
-      selected = cards.filter(function (c) { return c.dataset.realTarget === gameState.currentTarget; })[0] || null;
-    }
-    setRadioSelection(cards, selected);
-    document.getElementById('target-continue-btn').disabled = !selected;
-  }
-
-  function selectRealTarget(target, clickedCard) {
-    var cards = $all('.option-card', document.getElementById('screen-9'));
-    setRadioSelection(cards, clickedCard);
-    gameState.currentTarget = target;
-    document.getElementById('target-continue-btn').disabled = false;
-  }
-
-  function confirmRealTarget() {
-    if (!gameState.currentTarget) return;
-    gameState.firstTarget = gameState.currentTarget;
-    applyRealTheme(gameState.currentTarget);
-    saveGameState();
-    generateAndAnimateRealChallenge();
-  }
-
-  function generateAndAnimateRealChallenge() {
-    var challenge = generateChallenge();
+  /* Si ya existe un desafío generado para este recorrido (por
+     ejemplo, volvimos con "Atrás" a la pantalla de nombre y
+     confirmamos de nuevo), se reutiliza tal cual: nunca se genera
+     una combinación nueva al navegar hacia atrás y adelante. */
+  function generateAndAnimateChallenge() {
+    var challenge = (gameState.currentChallenge && gameState.currentChallenge.topic)
+      ? gameState.currentChallenge
+      : generateChallenge();
     gameState.currentChallenge = challenge;
     gameState.carouselFinished = false;
     saveGameState();
@@ -959,7 +905,7 @@
     });
   }
 
-  function goToRealResult() {
+  function goToChallengeResult() {
     if (!gameState.carouselFinished) return;
     renderChallenge(document.getElementById('screen-11'), gameState.currentChallenge);
     goToScreen(11);
@@ -968,13 +914,12 @@
   function goToWriteScreen() {
     renderChips(document.getElementById('write-chip-row'), gameState.currentChallenge);
     var textarea = document.getElementById('prediction-input');
-    var existingDraft = gameState.drafts[gameState.currentTarget] || '';
-    var isFirstEntry = existingDraft === '';
-    var value = existingDraft;
+    var isFirstEntry = gameState.currentDraft === '';
+    var value = gameState.currentDraft;
 
     if (isFirstEntry) {
-      value = buildPredictionTemplate(getPlayerName(gameState.currentTarget));
-      gameState.drafts[gameState.currentTarget] = value;
+      value = buildPredictionTemplate(gameState.currentRecipient);
+      gameState.currentDraft = value;
       saveGameState();
     }
 
@@ -996,10 +941,17 @@
     var btn = document.getElementById('save-prediction-btn');
     var value = textarea.value;
     var isEmpty = value.trim().length === 0;
-    var isUnfilledTemplate = !isEmpty && isTemplateUnfilled(value, getPlayerName(gameState.currentTarget));
+    var isUnfilledTemplate = !isEmpty && isTemplateUnfilled(value, gameState.currentRecipient);
     btn.disabled = isEmpty || isUnfilledTemplate;
+    /* Mientras sea la plantilla sin completar, se muestra como guía
+       (gris claro); en cuanto hay contenido real, pasa a texto normal. */
+    textarea.classList.toggle('is-guide-text', isUnfilledTemplate);
   }
 
+  /* Guarda la predicción una única vez (el botón se deshabilita de
+     inmediato y `isSaving` evita doble click; una vez guardada, la
+     pantalla 13 no tiene "Atrás", así que no hay forma de volver a
+     screen-12 y reenviar el mismo formulario). */
   function savePrediction() {
     if (isSaving) return;
     var textarea = document.getElementById('prediction-input');
@@ -1010,58 +962,86 @@
     var btn = document.getElementById('save-prediction-btn');
     btn.disabled = true;
 
-    var playerName = getPlayerName(gameState.currentTarget);
-
     var prediction = {
       id: 'prediction-' + Date.now(),
-      target: playerName,
-      topic: gameState.currentChallenge.topic,
-      requiredElement: gameState.currentChallenge.element,
-      context: gameState.currentChallenge.context,
+      recipient: gameState.currentRecipient,
+      mode: gameState.predictionMode,
+      challenge: {
+        topic: gameState.currentChallenge.topic,
+        element: gameState.currentChallenge.element,
+        context: gameState.currentChallenge.context
+      },
       text: text,
-      order: gameState.predictions.length + 1,
-      createdAt: new Date().toISOString(),
-      session: gameState.sessionId
+      sessionId: gameState.sessionId,
+      date: new Date().toISOString()
     };
 
     gameState.predictions.push(prediction);
-    gameState.completedTargets.push(gameState.currentTarget);
-    gameState.drafts[gameState.currentTarget] = '';
+    gameState.currentPrediction = prediction;
+    gameState.currentDraft = '';
     saveGameState();
 
     document.getElementById('saved-prediction-text').textContent = '“' + text + '”';
     var ownerLabel = document.getElementById('prediction-owner-label');
-    if (ownerLabel) ownerLabel.textContent = 'La predicción de ' + playerName;
-    var afterBtn = document.getElementById('after-save-btn');
-    afterBtn.textContent = gameState.completedTargets.length < 2 ? 'Continuar' : 'Ver mis predicciones';
+    if (ownerLabel) ownerLabel.textContent = 'La predicción de ' + prediction.recipient;
 
     goToScreen(13);
     isSaving = false;
   }
 
-  function afterSaveContinue() {
-    if (gameState.completedTargets.length < 2) {
-      goToScreen(14);
+  function continueToStageTwo() {
+    goToScreen(20);
+  }
+
+  function selectStageTwoMode(mode, clickedCard) {
+    var cards = $all('.option-card', document.getElementById('screen-20'));
+    setRadioSelection(cards, clickedCard);
+    gameState.stageTwoMode = mode;
+    document.getElementById('stage-two-continue-btn').disabled = false;
+  }
+
+  /* "Jugar con otras personas" lleva directo a la pantalla de
+     compartir (ya no hay una pantalla intermedia con una sola
+     tarjeta obligatoria); "Jugar por mi cuenta" lleva a elegir
+     entre las dos actividades individuales. */
+  function confirmStageTwoMode() {
+    if (!gameState.stageTwoMode) return;
+    saveGameState();
+    if (gameState.stageTwoMode === 'group') {
+      chooseActivity('share-group', 25);
     } else {
-      renderSummary();
-      goToScreen(15);
+      goToScreen(21);
     }
   }
 
-  function startSecondPrediction() {
-    gameState.currentTarget = otherTarget(gameState.firstTarget);
-    applyRealTheme(gameState.currentTarget);
-    resetCurrentChallenge();
-    generateAndAnimateRealChallenge();
-  }
-
-  function goToTransition() {
-    goToScreen(16);
-  }
-
-  function finishGame() {
+  function chooseActivity(activity, targetScreen) {
+    gameState.stageTwoActivity = activity;
     saveGameState();
+    goToScreen(targetScreen);
+  }
+
+  function finishActivity() {
     goToScreen(17);
+  }
+
+  /* "Crear otra predicción": arranca un recorrido nuevo desde la
+     elección de destinatario. Conserva selfName, el historial de
+     predicciones y los mazos/seenCombos del generador; no recarga
+     la página. */
+  function createAnotherPrediction() {
+    gameState.predictionMode = null;
+    gameState.currentRecipient = '';
+    gameState.currentDraft = '';
+    gameState.stageTwoMode = null;
+    gameState.stageTwoActivity = null;
+    resetCurrentChallenge();
+    gameState.sessionId = 'p-' + Date.now();
+    saveGameState();
+
+    screenHistory = [];
+    resetRecipientSelector();
+    resetStageTwoSelector();
+    goToScreen(9);
   }
 
   function backToHome() {
@@ -1075,16 +1055,12 @@
 
   function requestHome() {
     var current = gameState.currentScreen;
-    var onboardingScreens = [2, 8];
     var hasUnsavedDraft = current === 12 &&
       document.getElementById('prediction-input').value.trim().length > 0;
-    var midRealRound = [9, 10, 11, 12, 14].indexOf(current) !== -1 && gameState.completedTargets.length < 2;
+    var hasNameInProgress = NAME_ENTRY_SCREENS.indexOf(current) !== -1;
+    var hasChallengeInProgress = CHALLENGE_IN_PROGRESS_SCREENS.indexOf(current) !== -1;
 
-    if (onboardingScreens.indexOf(current) !== -1 && !hasUnsavedDraft) {
-      backToHome();
-      return;
-    }
-    if (hasUnsavedDraft || midRealRound) {
+    if (hasNameInProgress || hasChallengeInProgress || hasUnsavedDraft) {
       pendingHomeAction = confirmGoHome;
       document.getElementById('home-modal').hidden = false;
       return;
@@ -1093,7 +1069,9 @@
   }
 
   function confirmGoHome() {
-    gameState.draftText = '';
+    gameState.currentDraft = '';
+    gameState.predictionMode = null;
+    gameState.currentRecipient = '';
     resetCurrentChallenge();
     backToHome();
   }
@@ -1117,28 +1095,34 @@
 
     var textarea = document.getElementById('prediction-input');
     textarea.addEventListener('input', function () {
-      gameState.drafts[gameState.currentTarget] = textarea.value;
+      gameState.currentDraft = textarea.value;
       updateSaveButtonState();
       saveGameState();
     });
 
-    var playerOneInput = document.getElementById('player-one-name');
-    if (playerOneInput) {
-      playerOneInput.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter') { e.preventDefault(); confirmPlayerOneName(); }
+    var selfNameInput = document.getElementById('player-one-name');
+    if (selfNameInput) {
+      selfNameInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') { e.preventDefault(); confirmSelfName(); }
       });
     }
-    var playerTwoInput = document.getElementById('player-two-name');
-    if (playerTwoInput) {
-      playerTwoInput.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter') { e.preventDefault(); confirmPlayerTwoName(); }
+    var otherNameInput = document.getElementById('player-two-name');
+    if (otherNameInput) {
+      otherNameInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') { e.preventDefault(); confirmOtherName(); }
       });
     }
 
     document.addEventListener('click', function (e) {
-      var realCard = e.target.closest('[data-real-target]');
-      if (realCard) {
-        selectRealTarget(realCard.dataset.realTarget, realCard);
+      var recipientCard = e.target.closest('[data-recipient-mode]');
+      if (recipientCard) {
+        selectRecipientMode(recipientCard.dataset.recipientMode, recipientCard);
+        return;
+      }
+
+      var stageTwoCard = e.target.closest('[data-stage-two-mode]');
+      if (stageTwoCard) {
+        selectStageTwoMode(stageTwoCard.dataset.stageTwoMode, stageTwoCard);
         return;
       }
 
@@ -1148,20 +1132,25 @@
 
       switch (action) {
         case 'start-onboarding': startOnboarding(); break;
-        case 'goto-screen-8': goToRealGameIntro(); break;
-        case 'start-real-game': startRealGame(); break;
-        case 'confirm-player-one': confirmPlayerOneName(); break;
-        case 'confirm-player-two': confirmPlayerTwoName(); break;
-        case 'confirm-real-target': confirmRealTarget(); break;
-        case 'goto-real-result': goToRealResult(); break;
+        case 'start-real-game': startNewPredictionFlow(); break;
+        case 'confirm-recipient-mode': confirmRecipientMode(); break;
+        case 'confirm-self-name': confirmSelfName(); break;
+        case 'confirm-other-name': confirmOtherName(); break;
+        case 'goto-real-result': goToChallengeResult(); break;
         case 'goto-write': goToWriteScreen(); break;
         case 'save-prediction': savePrediction(); break;
-        case 'after-save-continue': afterSaveContinue(); break;
+        case 'continue-to-stage-two': continueToStageTwo(); break;
         case 'save-prediction-image': saveCurrentPredictionImage(); break;
         case 'share-prediction-image': shareCurrentPredictionImage(); break;
-        case 'start-second-prediction': startSecondPrediction(); break;
-        case 'goto-transition': goToTransition(); break;
-        case 'finish-game': finishGame(); break;
+        case 'confirm-stage-two-mode': confirmStageTwoMode(); break;
+        case 'activity-draw-solo': chooseActivity('draw-solo', 22); break;
+        case 'activity-continue-solo': chooseActivity('continue-solo', 23); break;
+        case 'goto-group-selection': goToScreen(26); break;
+        case 'activity-defend': chooseActivity('defend', 27); break;
+        case 'activity-vote': chooseActivity('vote', 28); break;
+        case 'activity-draw-group': chooseActivity('draw-group', 29); break;
+        case 'finish-activity': finishActivity(); break;
+        case 'create-another-prediction': createAnotherPrediction(); break;
         case 'back-to-home': backToHome(); break;
         case 'go-back': goBack(); break;
         case 'request-home': requestHome(); break;
