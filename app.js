@@ -5,114 +5,186 @@
      DATA
   ========================================================= */
 
-  /* Cada ítem: { t: texto, f: familia }. La familia evita que
-     tema y contexto queden de la misma familia (frase plana). */
+  /* =========================================================
+     DOCUMENTO EDITORIAL
+     =========================================================
+
+     REGLA MAESTRA
+     Cada variable tiene que ser divertida ANTES de combinarse.
+     Si leída sola no despierta ninguna imagen, no pertenece
+     al universo Borders.
+
+     ---------------------------------------------------------
+     LA PRUEBA DE UNIVERSALIDAD (dos filos)
+     ---------------------------------------------------------
+     El juego es abierto: cada jugador escribe los nombres de las
+     personas sobre las que va a predecir. Puede ser un amigo, la
+     abuela, un compañero de trabajo, un sobrino de nueve años.
+     Nunca sabemos quién es la persona elegida.
+
+     Por eso todo disparador tiene que pasar DOS filtros:
+
+     1. UNIVERSAL EN LA RELACIÓN
+        Cualquier jugador tiene que poder imaginar rápido a la
+        persona elegida dentro de esa situación, sin conocer su
+        vida privada.
+        Falla: "el grupo del secundario" (si no lo conozco, no
+        veo nada). Pasa: "su vecino de arriba".
+
+     2. UNIVERSAL EN LA ETAPA DE LA VIDA
+        Tiene que funcionar igual si la persona elegida tiene
+        nueve años o ochenta.
+        Falla: "su perfil de LinkedIn", "su renuncia".
+        Pasa: "quien le da órdenes", "su heladera".
+
+     Si un ítem falla cualquiera de los dos, no entra.
+
+     ---------------------------------------------------------
+     REGLA DEL POSESIVO (para TOPICS)
+     ---------------------------------------------------------
+     Todo tema tiene que poder llevar "su" adelante sin sonar
+     raro. Eso lo mantiene enganchado a la persona elegida, sea
+     quien sea.
+
+     Si es un personaje suelto sin relación con ella (un político,
+     un vendedor ambulante), no es tema: es un intruso, y va en
+     ELEMENTS.
+
+     Si podría ser una categoría de encuesta ("Viajes", "Amor",
+     "Salud"), tampoco entra. Tiene que ser algo que se pueda
+     señalar con el dedo.
+
+     ---------------------------------------------------------
+     REGLA DEL ADJETIVO (para ELEMENTS)
+     ---------------------------------------------------------
+     No rechazamos la fantasía. Rechazamos el adjetivo que le da
+     personalidad al objeto.
+
+     - Si el adjetivo lo vuelve más FÍSICO (inflable, roto,
+       descartable, chiquito), entra: eso es distopía patética.
+     - Si lo vuelve más SIMPÁTICO (tímido, resentido, educado),
+       no entra: ese chiste ya viene hecho y al jugador no le
+       queda nada por construir.
+
+     Un dinosaurio es fantasía. Un dinosaurio inflable es una
+     pelopincho en un estacionamiento. Esa es la diferencia.
+
+     Como los otros dos ejes son SIEMPRE mundanos, cualquier
+     elemento fantástico cae obligatoriamente en un marco banal:
+     al extraterrestre nunca le toca una nave, le toca la fila
+     del supermercado. La arquitectura deflaciona la fantasía
+     sola. Por eso el eje del intruso puede ser más raro de lo
+     que parecería prudente. Proporción objetivo: ~1 de cada 4.
+
+     ---------------------------------------------------------
+     REGLA DE LA SALA
+     ---------------------------------------------------------
+     Esto se juega en un cumpleaños. Evitamos material que pueda
+     enfriar la mesa aunque sea gracioso en abstracto: velorios,
+     hospitales, enfermedad, y política partidaria.
+
+     ---------------------------------------------------------
+     PREGUNTAS PARA ADMITIR UN ÍTEM
+     ---------------------------------------------------------
+     1. ¿Produce una imagen mental inmediata?
+     2. ¿Tiene tensión implícita (poder, vergüenza, deuda, deseo)?
+     3. ¿Invita a exagerarlo?
+     4. ¿Funciona con cualquier persona elegida, de cualquier edad?
+     5. ¿Deja algo por construir, o ya trae el chiste puesto?
+
+     Preferimos 26 excelentes a 80 correctas. Con 26 por eje y
+     4 tiradas por partida, el mazo aguanta 13 partidas sin
+     repetir ningún ítem.
+  ========================================================= */
   var TOPICS = [
-    { t: 'Su ex',                                f: 'amor' },
-    { t: 'El grupo de WhatsApp de la familia',   f: 'familia' },
-    { t: 'Su jefe',                              f: 'trabajo' },
-    { t: 'Su terapeuta',                         f: 'cuerpo' },
-    { t: 'Mudarse',                              f: 'casa' },
-    { t: 'Su cuenta bancaria',                   f: 'plata' },
-    { t: 'Sus vecinos',                          f: 'casa' },
-    { t: 'Una entrevista de trabajo',            f: 'trabajo' },
-    { t: 'El gimnasio',                          f: 'cuerpo' },
-    { t: 'Un casamiento ajeno',                  f: 'social' },
-    { t: 'Su tatuaje',                           f: 'cuerpo' },
+    { t: 'Su vecino de arriba',                  f: 'casa' },
+    { t: 'El portero de su edificio',            f: 'casa' },
+    { t: 'La reunión de consorcio',              f: 'casa' },
     { t: 'Su heladera',                          f: 'casa' },
-    { t: 'Aprender un idioma',                   f: 'ocio' },
+    { t: 'Su mudanza',                           f: 'casa' },
+    { t: 'Quien le da órdenes',                  f: 'trabajo' },
+    { t: 'Lo que hace todos los días a las ocho',f: 'trabajo' },
+    { t: 'Su peor decisión reciente',            f: 'trabajo' },
+    { t: 'La plata que le deben',                 f: 'plata' },
+    { t: 'Su herencia',                          f: 'plata' },
+    { t: 'Lo que compró y nunca usó',            f: 'plata' },
+    { t: 'Su ex',                                f: 'amor' },
+    { t: 'Su cita a ciegas',                     f: 'amor' },
+    { t: 'La persona que le gusta',               f: 'amor' },
+    { t: 'Su familia política',                  f: 'familia' },
+    { t: 'El grupo de WhatsApp de la familia',   f: 'familia' },
+    { t: 'Su apodo familiar',                    f: 'familia' },
     { t: 'Su corte de pelo',                     f: 'cuerpo' },
-    { t: 'Una cita a ciegas',                    f: 'amor' },
-    { t: 'El asado familiar',                    f: 'familia' },
-    { t: 'Su primer sueldo grande',              f: 'plata' },
-    { t: 'Un emprendimiento',                    f: 'trabajo' },
-    { t: 'Su perfil de LinkedIn',                f: 'trabajo' },
-    { t: 'Una herencia inesperada',              f: 'plata' },
+    { t: 'Su tatuaje',                           f: 'cuerpo' },
+    { t: 'Lo que le da vergüenza',                f: 'cuerpo' },
+    { t: 'Su celular viejo',                     f: 'tech' },
+    { t: 'Lo que postea a las tres de la mañana',f: 'tech' },
     { t: 'Su horóscopo',                         f: 'ocio' },
-    { t: 'Su playlist',                          f: 'ocio' },
-    { t: 'Un examen',                            f: 'trabajo' },
-    { t: 'Su casa nueva',                        f: 'casa' },
-    { t: 'Un vuelo con escala',                  f: 'viaje' },
-    { t: 'Su celular',                           f: 'tech' },
-    { t: 'Su cuenta de Instagram',               f: 'tech' },
-    { t: 'Un préstamo',                          f: 'plata' },
-    { t: 'La lista de invitados',                f: 'social' },
     { t: 'Su documento vencido',                 f: 'tramite' },
-    { t: 'Un grupo de amigos del secundario',    f: 'social' },
-    { t: 'Su plan de vacaciones',                f: 'viaje' }
+    { t: 'Su plan de vacaciones',                f: 'viaje' },
+    { t: 'Su reputación',                        f: 'social' }
   ];
 
-  /* El intruso absurdo. Familia 'none': no compite con nada. */
   var ELEMENTS = [
+    /* núcleo extraño sin remate */
     { t: 'Un pato',                              f: 'none' },
-    { t: 'Un cactus con nombre propio',          f: 'none' },
-    { t: 'Una media perdida',                    f: 'none' },
-    { t: 'Un mensaje enviado por error',         f: 'none' },
-    { t: 'Una tostadora',                        f: 'none' },
-    { t: 'Glitter',                              f: 'none' },
-    { t: 'Un extraterrestre muy educado',        f: 'none' },
-    { t: 'Un dinosaurio inflable',               f: 'none' },
-    { t: 'Una paloma con actitud',                f: 'none' },
-    { t: 'Un regalo inexplicable',               f: 'none' },
-    { t: 'Una peluca',                           f: 'none' },
-    { t: 'Un audio de catorce minutos',          f: 'none' },
-    { t: 'Un fantasma tímido',                   f: 'none' },
-    { t: 'Un disfraz de gallina',                f: 'none' },
-    { t: 'Una máquina que no sirve para nada',   f: 'none' },
-    { t: 'Un tutorial mal traducido',            f: 'none' },
-    { t: 'Una piñata',                           f: 'none' },
-    { t: 'Un robot doméstico resentido',         f: 'none' },
-    { t: 'Un meteorito muy chiquito',            f: 'none' },
-    { t: 'Una mascota ajena',                    f: 'none' },
-    { t: 'Un contrato firmado sin leer',         f: 'none' },
-    { t: 'Una llave que no abre nada',           f: 'none' },
-    { t: 'Un tupper que nadie reclama',          f: 'none' },
-    { t: 'Una bufanda tejida a mano',            f: 'none' },
-    { t: 'Un caracol',                           f: 'none' },
-    { t: 'Un espejo que responde tarde',         f: 'none' },
-    { t: 'Una alarma que suena sola',            f: 'none' },
-    { t: 'Un carrito de supermercado',           f: 'none' },
-    { t: 'Una carta que llegó veinte años tarde',f: 'none' },
-    { t: 'Un sombrero enorme',                   f: 'none' },
+    { t: 'Un maniquí',                           f: 'none' },
     { t: 'Una planta que se mueve sola',         f: 'none' },
-    { t: 'Un trofeo de algo que nadie ganó',     f: 'none' }
+    { t: 'Un caracol',                           f: 'none' },
+    /* fantasía desnuda: sustantivo solo, sin personalidad */
+    { t: 'Un fantasma',                          f: 'none' },
+    { t: 'Un extraterrestre',                    f: 'none' },
+    { t: 'Un robot',                             f: 'none' },
+    /* fantasía deflacionada: el adjetivo la baja a la realidad */
+    { t: 'Un dinosaurio inflable',               f: 'none' },
+    { t: 'Un meteorito muy chiquito',            f: 'none' },
+    { t: 'Un inflable gigante',                  f: 'none' },
+    /* objetos cotidianos vueltos absurdamente importantes */
+    { t: 'Una bufanda tejida a mano',            f: 'none' },
+    { t: 'Un tupper que nadie reclama',          f: 'none' },
+    { t: 'Una tostadora',                        f: 'none' },
+    { t: 'Un paquete sin remitente',             f: 'none' },
+    { t: 'Una llave que no abre nada',           f: 'none' },
+    { t: 'Un trofeo de algo que nadie ganó',     f: 'none' },
+    { t: 'Una carta que llegó veinte años tarde',f: 'none' },
+    { t: 'Un contrato firmado sin leer',         f: 'none' },
+    { t: 'Una cámara descartable',               f: 'none' },
+    { t: 'Un paraguas roto',                     f: 'none' },
+    { t: 'Un bidón lleno de algo',               f: 'none' },
+    { t: 'Una escoba',                           f: 'none' },
+    { t: 'Un megáfono',                          f: 'none' },
+    { t: 'Una media perdida',                    f: 'none' },
+    { t: 'Un audio de catorce minutos',          f: 'none' },
+    { t: 'Glitter',                              f: 'none' }
   ];
 
-  /* Siempre un lugar cotidiano y concreto, tiene que caber en
-     una foto. Se evitan hospitales/velatorios y similares. */
   var CONTEXTS = [
     { t: 'En un ascensor',                       f: 'casa' },
+    { t: 'En una reunión de consorcio',          f: 'casa' },
+    { t: 'En plena mudanza',                     f: 'casa' },
+    { t: 'En un estacionamiento',                f: 'viaje' },
+    { t: 'En un peaje',                          f: 'viaje' },
+    { t: 'En un colectivo lleno',                f: 'viaje' },
+    { t: 'En un aeropuerto a las cinco de la mañana', f: 'viaje' },
+    { t: 'En un hotel barato',                   f: 'viaje' },
+    { t: 'En una sala de espera',                f: 'tramite' },
+    { t: 'En un locutorio',                      f: 'tramite' },
+    { t: 'En un examen de manejo',               f: 'tramite' },
+    { t: 'En un call center',                    f: 'trabajo' },
+    { t: 'En una videollamada',                  f: 'trabajo' },
+    { t: 'En un karaoke',                        f: 'ocio' },
+    { t: 'En una clase de yoga',                 f: 'cuerpo' },
+    { t: 'En un probador de ropa',               f: 'cuerpo' },
+    { t: 'En una peluquería',                    f: 'cuerpo' },
     { t: 'En la fila del supermercado',          f: 'social' },
-    { t: 'En un casamiento',                     f: 'social' },
-    { t: 'En una videollamada de trabajo',       f: 'trabajo' },
+    { t: 'En un casamiento ajeno',               f: 'social' },
     { t: 'En un cumpleaños infantil',            f: 'social' },
     { t: 'En un baño público',                   f: 'social' },
-    { t: 'En un taxi',                           f: 'viaje' },
-    { t: 'Durante un apagón',                    f: 'casa' },
-    { t: 'En una sala de espera',                f: 'tramite' },
-    { t: 'En el vestuario del gimnasio',         f: 'cuerpo' },
-    { t: 'En un aeropuerto a las cinco de la mañana', f: 'viaje' },
-    { t: 'En un asado',                          f: 'familia' },
-    { t: 'En una reunión de consorcio',          f: 'casa' },
-    { t: 'En un karaoke',                        f: 'ocio' },
-    { t: 'En la puerta de un cajero',            f: 'plata' },
-    { t: 'En plena mudanza',                     f: 'casa' },
-    { t: 'En un colectivo lleno',                f: 'viaje' },
-    { t: 'En una terraza',                       f: 'ocio' },
-    { t: 'En un probador de ropa',               f: 'cuerpo' },
-    { t: 'En un hotel barato',                   f: 'viaje' },
-    { t: 'En un examen de manejo',               f: 'tramite' },
-    { t: 'En la playa en temporada baja',        f: 'viaje' },
-    { t: 'En una peluquería',                    f: 'cuerpo' },
-    { t: 'En un shopping que está cerrando',     f: 'social' },
+    { t: 'En una entrega de premios',            f: 'social' },
     { t: 'En una fiesta que ya terminó',         f: 'social' },
-    { t: 'En un estacionamiento',                f: 'viaje' },
-    { t: 'En una clase de yoga',                 f: 'cuerpo' },
-    { t: 'En la cola del banco',                 f: 'plata' },
-    { t: 'En una cena familiar',                 f: 'familia' },
-    { t: 'En un locutorio',                      f: 'tramite' },
-    { t: 'En el fondo de un grupo de WhatsApp',  f: 'tech' },
-    { t: 'En una entrega de premios',            f: 'social' }
+    { t: 'En un shopping que está cerrando',     f: 'social' },
+    { t: 'En la puerta de un cajero',            f: 'plata' },
+    { t: 'En un asado familiar',                 f: 'familia' }
   ];
 
   /* Arrays planos de texto para el carrusel (runCarousel espera strings). */
@@ -130,21 +202,25 @@
 
   /* =========================================================
      STATE
+
+     Cada recorrido crea una sola predicción (no hay segundo
+     jugador ni segunda predicción obligatoria). `selfName` es lo
+     único que persiste entre recorridos; el resto del estado de
+     "predicción en curso" se limpia en cada "Crear otra predicción".
   ========================================================= */
 
   var gameState = {
     currentScreen: 1,
-    players: [
-      { id: 'player-1', name: '' },
-      { id: 'player-2', name: '' }
-    ],
-    firstTarget: null,
-    currentTarget: null,
-    completedTargets: [],
+    selfName: '',                  // nombre propio, persistente entre recorridos
+    predictionMode: null,          // 'self' | 'other'
+    currentRecipient: '',          // nombre a mostrar en la predicción actual
     currentChallenge: { topic: null, element: null, context: null },
-    predictions: [],
+    currentDraft: '',              // borrador de la predicción en curso
+    currentPrediction: null,       // última predicción creada: { id, recipient, mode, challenge, text, sessionId, date }
+    stageTwoMode: null,            // 'solo' | 'group'
+    stageTwoActivity: null,        // 'draw-solo' | 'continue-solo' | 'share-group' | 'defend' | 'vote' | 'draw-group'
+    predictions: [],               // historial persistido de predicciones
     carouselFinished: false,
-    draftText: '',
     sessionId: null
   };
 
@@ -152,6 +228,16 @@
   var isSaving = false;
   var pendingHomeAction = null;
   var isExportingImage = false;
+
+  /* Pantallas donde, si el usuario pide "Volver al inicio", hay
+     contenido en curso sin guardar (nombre en progreso o desafío
+     ya generado / predicción todavía no guardada). */
+  var NAME_ENTRY_SCREENS = [18, 19];
+  var CHALLENGE_IN_PROGRESS_SCREENS = [10, 11, 12];
+
+  /* Pantallas de actividad de la Etapa 2 que muestran un resumen
+     de la última predicción creada. */
+  var RECAP_SCREENS = [22, 23, 27, 28, 29];
 
   /* =========================================================
      PREDICTION IMAGE EXPORT
@@ -270,39 +356,32 @@
     }
   }
 
+  /* Migración: si el localStorage viene de una versión anterior
+     (sin estos campos, o con la estructura vieja de dos jugadores),
+     cada campo nuevo arranca en su valor por defecto en vez de
+     romper el arranque. Los datos viejos de `predictions` no se
+     tocan ni se transforman: simplemente no se muestran en ningún
+     listado (la app ya no tiene una vista de historial visible). */
   function loadGameState() {
     try {
       var raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return;
       var saved = JSON.parse(raw);
       if (!saved || typeof saved !== 'object') return;
-      gameState.players = normalizePlayers(saved.players);
-      gameState.firstTarget = saved.firstTarget || null;
-      gameState.currentTarget = saved.currentTarget || null;
-      gameState.completedTargets = Array.isArray(saved.completedTargets) ? saved.completedTargets : [];
+      gameState.selfName = typeof saved.selfName === 'string' ? saved.selfName : '';
+      gameState.predictionMode = (saved.predictionMode === 'self' || saved.predictionMode === 'other') ? saved.predictionMode : null;
+      gameState.currentRecipient = typeof saved.currentRecipient === 'string' ? saved.currentRecipient : '';
       gameState.currentChallenge = saved.currentChallenge || { topic: null, element: null, context: null };
+      gameState.currentDraft = typeof saved.currentDraft === 'string' ? saved.currentDraft : '';
+      gameState.currentPrediction = (saved.currentPrediction && typeof saved.currentPrediction === 'object') ? saved.currentPrediction : null;
+      gameState.stageTwoMode = typeof saved.stageTwoMode === 'string' ? saved.stageTwoMode : null;
+      gameState.stageTwoActivity = typeof saved.stageTwoActivity === 'string' ? saved.stageTwoActivity : null;
       gameState.predictions = Array.isArray(saved.predictions) ? saved.predictions : [];
-      gameState.draftText = typeof saved.draftText === 'string' ? saved.draftText : '';
       gameState.currentScreen = typeof saved.currentScreen === 'number' ? saved.currentScreen : 1;
       gameState.sessionId = typeof saved.sessionId === 'string' ? saved.sessionId : null;
     } catch (e) {
       /* corrupted state — start fresh */
     }
-  }
-
-  /* Si el localStorage viene de una versión anterior (sin `players`,
-     o con datos corruptos), devuelve el par por defecto en vez de
-     romper el arranque. Los datos viejos de predicciones no se tocan. */
-  function normalizePlayers(raw) {
-    var defaults = [{ id: 'player-1', name: '' }, { id: 'player-2', name: '' }];
-    if (!Array.isArray(raw) || raw.length !== 2) return defaults;
-    var out = [];
-    for (var i = 0; i < 2; i++) {
-      var entry = raw[i];
-      var name = (entry && typeof entry.name === 'string') ? entry.name : '';
-      out.push({ id: defaults[i].id, name: name });
-    }
-    return out;
   }
 
   /* =========================================================
@@ -317,45 +396,24 @@
     return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }
 
-  function getPlayer(id) {
-    for (var i = 0; i < gameState.players.length; i++) {
-      if (gameState.players[i].id === id) return gameState.players[i];
-    }
-    return null;
-  }
+  var NAME_MAX = 20;
+  var NAME_PATTERN = /^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$/;
 
-  function getPlayerName(id) {
-    var player = getPlayer(id);
-    return player ? player.name : '';
-  }
-
-  function otherTarget(target) {
-    return target === 'player-1' ? 'player-2' : 'player-1';
-  }
-
-  var PLAYER_NAME_MAX = 20;
-  var PLAYER_NAME_PATTERN = /^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$/;
-
-  function sanitizePlayerName(raw) {
+  function sanitizeName(raw) {
     return (raw || '').trim();
   }
 
-  /* Devuelve { valid, name, error }. `otherName` es el nombre ya
-     cargado del otro jugador (o null si todavía no existe), para
-     poder rechazar nombres duplicados. */
-  function validatePlayerName(raw, otherName) {
-    var name = sanitizePlayerName(raw);
+  /* Devuelve { valid, name, error }. */
+  function validateName(raw) {
+    var name = sanitizeName(raw);
     if (!name) {
       return { valid: false, error: 'Escribí un nombre para continuar.' };
     }
-    if (name.length > PLAYER_NAME_MAX) {
-      return { valid: false, error: 'Máximo ' + PLAYER_NAME_MAX + ' caracteres.' };
+    if (name.length > NAME_MAX) {
+      return { valid: false, error: 'Máximo ' + NAME_MAX + ' caracteres.' };
     }
-    if (!PLAYER_NAME_PATTERN.test(name)) {
+    if (!NAME_PATTERN.test(name)) {
       return { valid: false, error: 'Usá solo letras, espacios, apóstrofes o guiones.' };
-    }
-    if (otherName && name.toLowerCase() === sanitizePlayerName(otherName).toLowerCase()) {
-      return { valid: false, error: 'Los dos nombres no pueden ser iguales.' };
     }
     return { valid: true, name: name, error: null };
   }
@@ -388,8 +446,8 @@
      persistencia en localStorage para no repetir entre partidas.
   ========================================================= */
 
-  var BAGS_KEY = 'gfb_bags_v1';
-  var SEEN_KEY = 'gfb_seen_v1';
+  var BAGS_KEY = 'gfb_bags_v3';
+  var SEEN_KEY = 'gfb_seen_v3';
   var SEEN_MAX = 60; // cuántas ternas recordamos antes de olvidar las viejas
   var CONTEXT_RETRY_LIMIT = 40; // más que el tamaño del mazo de contexts
 
@@ -477,8 +535,8 @@
   }
 
   /* Saca el índice de una carta puntual del mazo, si está ahí.
-     La usa el fallback determinístico para no dejar la carta
-     duplicada (en el mazo y en uso) tras un pickValidContext. */
+     La usa el fallback determinístico (forceValidContext) para no
+     dejar la carta duplicada entre el mazo y la que ya está en uso. */
   function removeFromBag(axis, item) {
     var pool = poolFor(axis);
     for (var i = 0; i < pool.length; i++) {
@@ -525,26 +583,33 @@
 
   /* topic y element se sortean una única vez por generación (nunca
      entran en conflicto entre sí). Solo context se reintenta, ya
-     que es el único eje que puede colisionar con topic. */
-  function pickValidContext(topic, element) {
+     que es el único eje que puede colisionar con topic. Los
+     contextos rechazados se acumulan y vuelven al mazo recién al
+     final (no se pierden, solo pierden el turno). Si el tope de
+     intentos no alcanza, el barrido determinístico de
+     forceValidContext garantiza que igual nunca se acepte una
+     colisión de familia ni un bucle infinito. */
+  function generateChallenge() {
+    var topic = drawFrom('topic');
+    var element = drawFrom('element');
     var context = drawFrom('context');
-    var attempts = 1;
+    var rejected = [];
+    var attempts = 0;
+
     while (isBadCombo(topic, element, context) && attempts < CONTEXT_RETRY_LIMIT) {
-      putBack('context', context);
+      rejected.push(context);
       context = drawFrom('context');
       attempts++;
     }
+
+    for (var i = 0; i < rejected.length; i++) {
+      putBack('context', rejected[i]);
+    }
+
     if (isBadCombo(topic, element, context)) {
       putBack('context', context);
       context = forceValidContext(topic, element);
     }
-    return context;
-  }
-
-  function generateChallenge() {
-    var topic = drawFrom('topic');
-    var element = drawFrom('element');
-    var context = pickValidContext(topic, element);
 
     var challenge = { topic: topic.t, element: element.t, context: context.t };
     seenCombos.push(comboKey(challenge));
@@ -556,6 +621,35 @@
   function resetCurrentChallenge() {
     gameState.currentChallenge = { topic: null, element: null, context: null };
     gameState.carouselFinished = false;
+  }
+
+  /* =========================================================
+     PREDICTION TEMPLATE
+  ========================================================= */
+
+  function buildPredictionTemplate(name) {
+    return 'En 202__, ' + name + ' va a...\nporque ___________________.';
+  }
+
+  /* Reduce el texto a una firma comparable: el año (escrito o en
+     blanco) cuenta como un mismo token, cualquier tira de guiones
+     bajos se colapsa a una sola, y se ignoran signos y espacios.
+     Así "completar el año" o "tocar los guiones" nunca cuenta como
+     predicción real. */
+  function normalizeForTemplateCheck(text) {
+    return (text || '')
+      .replace(/^En\s+202[\d_]*,/i, 'En 202X,')
+      .replace(/_+/g, '_')
+      .replace(/[.,!¡¿?;:\-–—'"“”‘’…]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .toLowerCase();
+  }
+
+  /* La comparación siempre reconstruye la plantilla con el nombre
+     dinámico del destinatario actual: nunca depende de un nombre fijo. */
+  function isTemplateUnfilled(value, name) {
+    return normalizeForTemplateCheck(value) === normalizeForTemplateCheck(buildPredictionTemplate(name));
   }
 
   /* =========================================================
@@ -645,21 +739,14 @@
       '<span class="chip chip-context">' + challenge.context + '</span>';
   }
 
-  function renderSummary() {
-    var list = document.getElementById('summary-list');
-    list.innerHTML = '';
-    var currentSessionPredictions = gameState.predictions.filter(function (p) {
-      return p.session === gameState.sessionId;
-    });
-    currentSessionPredictions.forEach(function (p) {
-      var card = document.createElement('div');
-      card.className = 'summary-card';
-      card.innerHTML =
-        '<p class="note-header">Predicción <span class="summary-target">' + p.target + '</span></p>' +
-        '<p class="summary-text"></p>';
-      card.querySelector('.summary-text').textContent = p.text;
-      list.appendChild(card);
-    });
+  /* Todas las pantallas de actividad de la Etapa 2 muestran la
+     última predicción creada (gameState.currentPrediction), nunca
+     generan ni modifican una predicción nueva. */
+  function renderPredictionRecap(screenNumber) {
+    var el = document.querySelector('#screen-' + screenNumber + ' .prediction-recap-text');
+    if (el && gameState.currentPrediction) {
+      el.textContent = '“' + gameState.currentPrediction.text + '”';
+    }
   }
 
   /* =========================================================
@@ -683,11 +770,11 @@
     }
     gameState.currentScreen = n;
     saveGameState();
-    if (n === 9) renderPlayerSelectOptions();
+    if (RECAP_SCREENS.indexOf(n) !== -1) renderPredictionRecap(n);
   }
 
   /* "Atrás": retrocede exactamente un paso siguiendo el recorrido
-     real (no reinicia nada, no borra nombres ni predicciones). */
+     real (no reinicia nada, no borra nombre, desafío ni borrador). */
   function goBack() {
     var previous = screenHistory.pop();
     if (previous == null) {
@@ -695,26 +782,6 @@
       return;
     }
     goToScreen(previous, true);
-  }
-
-  function applyRealTheme(target) {
-    /* Tema estable por jugador (player-1 / player-2), no por quién
-       empieza primero: cada persona conserva su color toda la partida. */
-    var isPlayerOne = target === 'player-1';
-    ['screen-10', 'screen-11', 'screen-12'].forEach(function (id) {
-      var el = document.getElementById(id);
-      if (!el) return;
-      el.classList.toggle('theme-bg-yo', !isPlayerOne);
-      el.classList.toggle('theme-bg-lina', isPlayerOne);
-    });
-    ['screen-13', 'screen-14'].forEach(function (id) {
-      var el = document.getElementById(id);
-      if (!el) return;
-      el.classList.toggle('theme-flat-yo', !isPlayerOne);
-      el.classList.toggle('theme-flat-lina', isPlayerOne);
-    });
-    var card = document.getElementById('real-challenge-card');
-    if (card) card.classList.toggle('theme-yo', !isPlayerOne);
   }
 
   function setRadioSelection(cards, selectedCard) {
@@ -735,96 +802,95 @@
     goToScreen(2);
   }
 
-  function goToRealGameIntro() {
-    goToScreen(8);
-  }
-
-  function startRealGame() {
-    gameState.players = [
-      { id: 'player-1', name: '' },
-      { id: 'player-2', name: '' }
-    ];
-    gameState.firstTarget = null;
-    gameState.currentTarget = null;
-    gameState.completedTargets = [];
-    gameState.sessionId = 'p-' + Date.now();
+  /* "Crear una predicción" (onboarding): arranca un recorrido nuevo. No toca selfName,
+     el historial de predicciones, ni los mazos del generador. */
+  function startNewPredictionFlow() {
+    gameState.predictionMode = null;
+    gameState.currentRecipient = '';
+    gameState.currentDraft = '';
+    gameState.stageTwoMode = null;
+    gameState.stageTwoActivity = null;
     resetCurrentChallenge();
-    gameState.draftText = '';
+    gameState.sessionId = 'p-' + Date.now();
     saveGameState();
 
-    var nameOneInput = document.getElementById('player-one-name');
-    if (nameOneInput) nameOneInput.value = '';
-    hideFieldError('player-one-error');
-    var nameTwoInput = document.getElementById('player-two-name');
-    if (nameTwoInput) nameTwoInput.value = '';
-    hideFieldError('player-two-error');
-
-    var cards = $all('.option-card', document.getElementById('screen-9'));
-    setRadioSelection(cards, null);
-    document.getElementById('target-continue-btn').disabled = true;
-    goToScreen(18);
+    resetRecipientSelector();
+    resetStageTwoSelector();
+    goToScreen(9);
   }
 
-  function confirmPlayerOneName() {
+  function resetRecipientSelector() {
+    var cards = $all('.option-card', document.getElementById('screen-9'));
+    setRadioSelection(cards, null);
+    document.getElementById('recipient-continue-btn').disabled = true;
+  }
+
+  function resetStageTwoSelector() {
+    var cards = $all('.option-card', document.getElementById('screen-20'));
+    setRadioSelection(cards, null);
+    document.getElementById('stage-two-continue-btn').disabled = true;
+  }
+
+  function selectRecipientMode(mode, clickedCard) {
+    var cards = $all('.option-card', document.getElementById('screen-9'));
+    setRadioSelection(cards, clickedCard);
+    gameState.predictionMode = mode;
+    document.getElementById('recipient-continue-btn').disabled = false;
+  }
+
+  function confirmRecipientMode() {
+    if (!gameState.predictionMode) return;
+    saveGameState();
+    if (gameState.predictionMode === 'self') {
+      var selfInput = document.getElementById('player-one-name');
+      selfInput.value = gameState.selfName || '';
+      hideFieldError('player-one-error');
+      goToScreen(18);
+    } else {
+      var otherInput = document.getElementById('player-two-name');
+      otherInput.value = '';
+      hideFieldError('player-two-error');
+      goToScreen(19);
+    }
+  }
+
+  function confirmSelfName() {
     var input = document.getElementById('player-one-name');
-    var result = validatePlayerName(input.value, null);
+    var result = validateName(input.value);
     if (!result.valid) {
       showFieldError('player-one-error', result.error);
       return;
     }
     hideFieldError('player-one-error');
-    gameState.players[0].name = result.name;
+    gameState.selfName = result.name;
+    gameState.currentRecipient = result.name;
     input.value = result.name;
     saveGameState();
-    goToScreen(19);
+    generateAndAnimateChallenge();
   }
 
-  function confirmPlayerTwoName() {
+  function confirmOtherName() {
     var input = document.getElementById('player-two-name');
-    var result = validatePlayerName(input.value, gameState.players[0].name);
+    var result = validateName(input.value);
     if (!result.valid) {
       showFieldError('player-two-error', result.error);
       return;
     }
     hideFieldError('player-two-error');
-    gameState.players[1].name = result.name;
+    gameState.currentRecipient = result.name;
     input.value = result.name;
     saveGameState();
-    goToScreen(9);
+    generateAndAnimateChallenge();
   }
 
-  function renderPlayerSelectOptions() {
-    var container = document.getElementById('real-target-options');
-    if (!container) return;
-    $all('.option-player-name', container).forEach(function (el) {
-      el.textContent = getPlayerName(el.dataset.playerId);
-    });
-    var cards = $all('.option-card', container);
-    var selected = null;
-    if (gameState.currentTarget) {
-      selected = cards.filter(function (c) { return c.dataset.realTarget === gameState.currentTarget; })[0] || null;
-    }
-    setRadioSelection(cards, selected);
-    document.getElementById('target-continue-btn').disabled = !selected;
-  }
-
-  function selectRealTarget(target, clickedCard) {
-    var cards = $all('.option-card', document.getElementById('screen-9'));
-    setRadioSelection(cards, clickedCard);
-    gameState.currentTarget = target;
-    document.getElementById('target-continue-btn').disabled = false;
-  }
-
-  function confirmRealTarget() {
-    if (!gameState.currentTarget) return;
-    gameState.firstTarget = gameState.currentTarget;
-    applyRealTheme(gameState.currentTarget);
-    saveGameState();
-    generateAndAnimateRealChallenge();
-  }
-
-  function generateAndAnimateRealChallenge() {
-    var challenge = generateChallenge();
+  /* Si ya existe un desafío generado para este recorrido (por
+     ejemplo, volvimos con "Atrás" a la pantalla de nombre y
+     confirmamos de nuevo), se reutiliza tal cual: nunca se genera
+     una combinación nueva al navegar hacia atrás y adelante. */
+  function generateAndAnimateChallenge() {
+    var challenge = (gameState.currentChallenge && gameState.currentChallenge.topic)
+      ? gameState.currentChallenge
+      : generateChallenge();
     gameState.currentChallenge = challenge;
     gameState.carouselFinished = false;
     saveGameState();
@@ -839,7 +905,7 @@
     });
   }
 
-  function goToRealResult() {
+  function goToChallengeResult() {
     if (!gameState.carouselFinished) return;
     renderChallenge(document.getElementById('screen-11'), gameState.currentChallenge);
     goToScreen(11);
@@ -848,18 +914,44 @@
   function goToWriteScreen() {
     renderChips(document.getElementById('write-chip-row'), gameState.currentChallenge);
     var textarea = document.getElementById('prediction-input');
-    textarea.value = gameState.draftText || '';
+    var isFirstEntry = gameState.currentDraft === '';
+    var value = gameState.currentDraft;
+
+    if (isFirstEntry) {
+      value = buildPredictionTemplate(gameState.currentRecipient);
+      gameState.currentDraft = value;
+      saveGameState();
+    }
+
+    textarea.value = value;
     updateSaveButtonState();
     goToScreen(12);
-    setTimeout(function () { textarea.focus(); }, 300);
+    setTimeout(function () {
+      textarea.focus();
+      if (isFirstEntry && typeof textarea.setSelectionRange === 'function') {
+        var cursorPos = value.indexOf('_');
+        if (cursorPos === -1) cursorPos = value.length;
+        textarea.setSelectionRange(cursorPos, cursorPos);
+      }
+    }, 300);
   }
 
   function updateSaveButtonState() {
     var textarea = document.getElementById('prediction-input');
     var btn = document.getElementById('save-prediction-btn');
-    btn.disabled = textarea.value.trim().length === 0;
+    var value = textarea.value;
+    var isEmpty = value.trim().length === 0;
+    var isUnfilledTemplate = !isEmpty && isTemplateUnfilled(value, gameState.currentRecipient);
+    btn.disabled = isEmpty || isUnfilledTemplate;
+    /* Mientras sea la plantilla sin completar, se muestra como guía
+       (gris claro); en cuanto hay contenido real, pasa a texto normal. */
+    textarea.classList.toggle('is-guide-text', isUnfilledTemplate);
   }
 
+  /* Guarda la predicción una única vez (el botón se deshabilita de
+     inmediato y `isSaving` evita doble click; una vez guardada, la
+     pantalla 13 no tiene "Atrás", así que no hay forma de volver a
+     screen-12 y reenviar el mismo formulario). */
   function savePrediction() {
     if (isSaving) return;
     var textarea = document.getElementById('prediction-input');
@@ -870,58 +962,86 @@
     var btn = document.getElementById('save-prediction-btn');
     btn.disabled = true;
 
-    var playerName = getPlayerName(gameState.currentTarget);
-
     var prediction = {
       id: 'prediction-' + Date.now(),
-      target: playerName,
-      topic: gameState.currentChallenge.topic,
-      requiredElement: gameState.currentChallenge.element,
-      context: gameState.currentChallenge.context,
+      recipient: gameState.currentRecipient,
+      mode: gameState.predictionMode,
+      challenge: {
+        topic: gameState.currentChallenge.topic,
+        element: gameState.currentChallenge.element,
+        context: gameState.currentChallenge.context
+      },
       text: text,
-      order: gameState.predictions.length + 1,
-      createdAt: new Date().toISOString(),
-      session: gameState.sessionId
+      sessionId: gameState.sessionId,
+      date: new Date().toISOString()
     };
 
     gameState.predictions.push(prediction);
-    gameState.completedTargets.push(gameState.currentTarget);
-    gameState.draftText = '';
+    gameState.currentPrediction = prediction;
+    gameState.currentDraft = '';
     saveGameState();
 
     document.getElementById('saved-prediction-text').textContent = '“' + text + '”';
     var ownerLabel = document.getElementById('prediction-owner-label');
-    if (ownerLabel) ownerLabel.textContent = 'La predicción de ' + playerName;
-    var afterBtn = document.getElementById('after-save-btn');
-    afterBtn.textContent = gameState.completedTargets.length < 2 ? 'Continuar' : 'Ver mis predicciones';
+    if (ownerLabel) ownerLabel.textContent = 'La predicción de ' + prediction.recipient;
 
     goToScreen(13);
     isSaving = false;
   }
 
-  function afterSaveContinue() {
-    if (gameState.completedTargets.length < 2) {
-      goToScreen(14);
+  function continueToStageTwo() {
+    goToScreen(20);
+  }
+
+  function selectStageTwoMode(mode, clickedCard) {
+    var cards = $all('.option-card', document.getElementById('screen-20'));
+    setRadioSelection(cards, clickedCard);
+    gameState.stageTwoMode = mode;
+    document.getElementById('stage-two-continue-btn').disabled = false;
+  }
+
+  /* "Jugar con otras personas" lleva directo a la pantalla de
+     compartir (ya no hay una pantalla intermedia con una sola
+     tarjeta obligatoria); "Jugar por mi cuenta" lleva a elegir
+     entre las dos actividades individuales. */
+  function confirmStageTwoMode() {
+    if (!gameState.stageTwoMode) return;
+    saveGameState();
+    if (gameState.stageTwoMode === 'group') {
+      chooseActivity('share-group', 25);
     } else {
-      renderSummary();
-      goToScreen(15);
+      goToScreen(21);
     }
   }
 
-  function startSecondPrediction() {
-    gameState.currentTarget = otherTarget(gameState.firstTarget);
-    applyRealTheme(gameState.currentTarget);
-    resetCurrentChallenge();
-    generateAndAnimateRealChallenge();
-  }
-
-  function goToTransition() {
-    goToScreen(16);
-  }
-
-  function finishGame() {
+  function chooseActivity(activity, targetScreen) {
+    gameState.stageTwoActivity = activity;
     saveGameState();
+    goToScreen(targetScreen);
+  }
+
+  function finishActivity() {
     goToScreen(17);
+  }
+
+  /* "Crear otra predicción": arranca un recorrido nuevo desde la
+     elección de destinatario. Conserva selfName, el historial de
+     predicciones y los mazos/seenCombos del generador; no recarga
+     la página. */
+  function createAnotherPrediction() {
+    gameState.predictionMode = null;
+    gameState.currentRecipient = '';
+    gameState.currentDraft = '';
+    gameState.stageTwoMode = null;
+    gameState.stageTwoActivity = null;
+    resetCurrentChallenge();
+    gameState.sessionId = 'p-' + Date.now();
+    saveGameState();
+
+    screenHistory = [];
+    resetRecipientSelector();
+    resetStageTwoSelector();
+    goToScreen(9);
   }
 
   function backToHome() {
@@ -935,16 +1055,12 @@
 
   function requestHome() {
     var current = gameState.currentScreen;
-    var onboardingScreens = [2, 8];
     var hasUnsavedDraft = current === 12 &&
       document.getElementById('prediction-input').value.trim().length > 0;
-    var midRealRound = [9, 10, 11, 12, 14].indexOf(current) !== -1 && gameState.completedTargets.length < 2;
+    var hasNameInProgress = NAME_ENTRY_SCREENS.indexOf(current) !== -1;
+    var hasChallengeInProgress = CHALLENGE_IN_PROGRESS_SCREENS.indexOf(current) !== -1;
 
-    if (onboardingScreens.indexOf(current) !== -1 && !hasUnsavedDraft) {
-      backToHome();
-      return;
-    }
-    if (hasUnsavedDraft || midRealRound) {
+    if (hasNameInProgress || hasChallengeInProgress || hasUnsavedDraft) {
       pendingHomeAction = confirmGoHome;
       document.getElementById('home-modal').hidden = false;
       return;
@@ -953,7 +1069,9 @@
   }
 
   function confirmGoHome() {
-    gameState.draftText = '';
+    gameState.currentDraft = '';
+    gameState.predictionMode = null;
+    gameState.currentRecipient = '';
     resetCurrentChallenge();
     backToHome();
   }
@@ -977,28 +1095,34 @@
 
     var textarea = document.getElementById('prediction-input');
     textarea.addEventListener('input', function () {
-      gameState.draftText = textarea.value;
+      gameState.currentDraft = textarea.value;
       updateSaveButtonState();
       saveGameState();
     });
 
-    var playerOneInput = document.getElementById('player-one-name');
-    if (playerOneInput) {
-      playerOneInput.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter') { e.preventDefault(); confirmPlayerOneName(); }
+    var selfNameInput = document.getElementById('player-one-name');
+    if (selfNameInput) {
+      selfNameInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') { e.preventDefault(); confirmSelfName(); }
       });
     }
-    var playerTwoInput = document.getElementById('player-two-name');
-    if (playerTwoInput) {
-      playerTwoInput.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter') { e.preventDefault(); confirmPlayerTwoName(); }
+    var otherNameInput = document.getElementById('player-two-name');
+    if (otherNameInput) {
+      otherNameInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') { e.preventDefault(); confirmOtherName(); }
       });
     }
 
     document.addEventListener('click', function (e) {
-      var realCard = e.target.closest('[data-real-target]');
-      if (realCard) {
-        selectRealTarget(realCard.dataset.realTarget, realCard);
+      var recipientCard = e.target.closest('[data-recipient-mode]');
+      if (recipientCard) {
+        selectRecipientMode(recipientCard.dataset.recipientMode, recipientCard);
+        return;
+      }
+
+      var stageTwoCard = e.target.closest('[data-stage-two-mode]');
+      if (stageTwoCard) {
+        selectStageTwoMode(stageTwoCard.dataset.stageTwoMode, stageTwoCard);
         return;
       }
 
@@ -1008,20 +1132,25 @@
 
       switch (action) {
         case 'start-onboarding': startOnboarding(); break;
-        case 'goto-screen-8': goToRealGameIntro(); break;
-        case 'start-real-game': startRealGame(); break;
-        case 'confirm-player-one': confirmPlayerOneName(); break;
-        case 'confirm-player-two': confirmPlayerTwoName(); break;
-        case 'confirm-real-target': confirmRealTarget(); break;
-        case 'goto-real-result': goToRealResult(); break;
+        case 'start-real-game': startNewPredictionFlow(); break;
+        case 'confirm-recipient-mode': confirmRecipientMode(); break;
+        case 'confirm-self-name': confirmSelfName(); break;
+        case 'confirm-other-name': confirmOtherName(); break;
+        case 'goto-real-result': goToChallengeResult(); break;
         case 'goto-write': goToWriteScreen(); break;
         case 'save-prediction': savePrediction(); break;
-        case 'after-save-continue': afterSaveContinue(); break;
+        case 'continue-to-stage-two': continueToStageTwo(); break;
         case 'save-prediction-image': saveCurrentPredictionImage(); break;
         case 'share-prediction-image': shareCurrentPredictionImage(); break;
-        case 'start-second-prediction': startSecondPrediction(); break;
-        case 'goto-transition': goToTransition(); break;
-        case 'finish-game': finishGame(); break;
+        case 'confirm-stage-two-mode': confirmStageTwoMode(); break;
+        case 'activity-draw-solo': chooseActivity('draw-solo', 22); break;
+        case 'activity-continue-solo': chooseActivity('continue-solo', 23); break;
+        case 'goto-group-selection': goToScreen(26); break;
+        case 'activity-defend': chooseActivity('defend', 27); break;
+        case 'activity-vote': chooseActivity('vote', 28); break;
+        case 'activity-draw-group': chooseActivity('draw-group', 29); break;
+        case 'finish-activity': finishActivity(); break;
+        case 'create-another-prediction': createAnotherPrediction(); break;
         case 'back-to-home': backToHome(); break;
         case 'go-back': goBack(); break;
         case 'request-home': requestHome(); break;

@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Generador de Futuros Borders</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+  href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+  rel="stylesheet"
+>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -16,15 +22,14 @@
         <header class="brand-row">
           <span class="handle"><a href="https://www.instagram.com/linaandrada" target="_blank" rel="noopener noreferrer">@linaandrada</a></span>
         </header>
-        <div class="hero-illustration">
-          <img src="assets/images/dino-inicio.png" alt="Dinosaurio saludando con remera de fuego" onerror="this.onerror=null;this.src='assets/images/placeholder.svg'">
-        </div>
         <h1 class="title-block">
-          GENERADOR<br>DE FUTUROS
-          <span class="handwritten">borders</span>
+          <img class="title-logo" src="assets/images/logo1.png" alt="Inventá Futuros borders" onerror="this.onerror=null;this.src='assets/images/placeholder.svg'">
         </h1>
+        <div class="hero-illustration">
+          <img src="assets/images/dino-inicio.png" alt="Dinosaurio con lentes de sol y abrigo de piel, saludando con un pato en brazos" onerror="this.onerror=null;this.src='assets/images/placeholder.svg'">
+        </div>
         <p class="description">
-          Inventá futuros tan dudosos como posibles. Después compartilos y descubrí si el tiempo les da la razón.
+          La app propone. Vos imaginás
         </p>
       </div>
       <div class="button-bar">
@@ -37,46 +42,76 @@
       <div class="screen-inner">
         <header class="nav-row">
           <span class="handle"><a href="https://www.instagram.com/linaandrada" target="_blank" rel="noopener noreferrer">@linaandrada</a></span>
-          <span class="logo">GDF<span class="logo-accent">borders</span></span>
+          <button type="button" class="logo-home-btn" data-action="request-home" aria-label="Volver al inicio">
+            <img class="logo" src="assets/images/logo2.png" alt="" onerror="this.onerror=null;this.src='assets/images/placeholder.svg'">
+          </button>
         </header>
         <button class="back-link" data-action="go-back">&larr; Atrás</button>
         <h1 class="title-md">¿Cómo se juega?</h1>
-        <p class="subtitle">Vas a crear predicciones para vos y para otras personas. Después, el juego continúa fuera de la pantalla para compartir, crear y elegir las mejores predicciones.</p>
         <div class="step-stack">
-          <div class="step-card step-1"><span class="step-num">①</span> Elegí una persona</div>
-          <div class="step-card step-2"><span class="step-num">②</span> Recibí un desafío</div>
-          <div class="step-card step-3 accent"><span class="step-num">③</span> Escribí y compartí una predicción</div>
+          <div class="step-card">
+            <span class="step-num">①</span>
+            <div class="step-body">
+              <p class="step-title">La app propone el punto de partida</p>
+              <p class="step-desc">Vas a recibir tres ideas inesperadas. Tu desafío será unirlas en una misma predicción.</p>
+            </div>
+          </div>
+          <div class="step-card">
+            <span class="step-num">②</span>
+            <div class="step-body">
+              <p class="step-title">Vos imaginás un futuro border</p>
+              <p class="step-desc">Escribí una predicción que conecte esas tres ideas.</p>
+            </div>
+          </div>
+          <div class="step-card">
+            <span class="step-num">③</span>
+            <div class="step-body">
+              <p class="step-title">El juego sigue como vos quieras</p>
+              <p class="step-desc">Podés continuar por tu cuenta o compartir la predicción con otras personas para seguir jugando</p>
+            </div>
+          </div>
         </div>
       </div>
       <div class="button-bar">
-        <button class="btn btn-primary" data-action="goto-screen-8">Siguiente</button>
+        <button class="btn btn-primary" data-action="start-real-game">Crear una predicción</button>
       </div>
     </section>
 
-    <!-- SCREEN 8: Inicio del juego real -->
-    <section class="screen" id="screen-8" data-screen="8" aria-label="Inicio del juego real" hidden>
+    <!-- SCREEN 9: Elegir destinatario -->
+    <section class="screen" id="screen-9" data-screen="9" aria-label="Elegir destinatario" hidden>
       <div class="screen-inner">
         <header class="nav-row">
           <span class="handle"><a href="https://www.instagram.com/linaandrada" target="_blank" rel="noopener noreferrer">@linaandrada</a></span>
-          <span class="logo">GDF<span class="logo-accent">borders</span></span>
+          <button type="button" class="logo-home-btn" data-action="request-home" aria-label="Volver al inicio">
+            <img class="logo" src="assets/images/logo2.png" alt="" onerror="this.onerror=null;this.src='assets/images/placeholder.svg'">
+          </button>
         </header>
-        <h1 class="title-center">¡Ahora a jugar!</h1>
-        <div class="dino-center dino-glitter-wrap">
-          <img src="assets/images/dino-glitter.png" alt="Dinosaurio con escoba limpiando glitter derramado" onerror="this.onerror=null;this.src='assets/images/placeholder.svg'">
-          <p class="glitter-caption">VAS A SOBREVIVIR<br>A UN APOCALIPSIS MENOR<br>PROVOCADO POR GLITTER</p>
+        <button class="back-link" data-action="go-back">&larr; Atrás</button>
+        <h1 class="title-md">¿Para quién va a ser esta predicción?</h1>
+        <div class="option-list" role="radiogroup" aria-label="¿Para quién va a ser esta predicción?" id="recipient-mode-options">
+          <button type="button" class="option-card" data-recipient-mode="self" role="radio" aria-checked="false">
+            <span class="checkbox" aria-hidden="true"></span>
+            <span class="option-text"><strong>Para mí</strong></span>
+          </button>
+          <button type="button" class="option-card" data-recipient-mode="other" role="radio" aria-checked="false">
+            <span class="checkbox" aria-hidden="true"></span>
+            <span class="option-text"><strong>Para otra persona</strong></span>
+          </button>
         </div>
       </div>
       <div class="button-bar">
-        <button class="btn btn-primary" data-action="start-real-game">Comenzar juego</button>
+        <button class="btn btn-primary" data-action="confirm-recipient-mode" id="recipient-continue-btn" disabled>Continuar</button>
       </div>
     </section>
 
-    <!-- SCREEN 18: Ingresá tu nombre -->
+    <!-- SCREEN 18: Ingresá tu nombre (para mí) -->
     <section class="screen" id="screen-18" data-screen="18" aria-label="Ingresá tu nombre" hidden>
       <div class="screen-inner">
         <header class="nav-row">
           <span class="handle"><a href="https://www.instagram.com/linaandrada" target="_blank" rel="noopener noreferrer">@linaandrada</a></span>
-          <span class="logo">GDF<span class="logo-accent">borders</span></span>
+          <button type="button" class="logo-home-btn" data-action="request-home" aria-label="Volver al inicio">
+            <img class="logo" src="assets/images/logo2.png" alt="" onerror="this.onerror=null;this.src='assets/images/placeholder.svg'">
+          </button>
         </header>
         <button class="back-link" data-action="go-back">&larr; Atrás</button>
         <h1 class="title-md">Ingresá tu nombre</h1>
@@ -87,61 +122,40 @@
         <p class="field-error" id="player-one-error" hidden></p>
       </div>
       <div class="button-bar">
-        <button class="btn btn-primary" data-action="confirm-player-one">Continuar</button>
+        <button class="btn btn-primary" data-action="confirm-self-name">Continuar</button>
       </div>
     </section>
 
-    <!-- SCREEN 19: Ingresá el nombre de la otra persona -->
-    <section class="screen" id="screen-19" data-screen="19" aria-label="Ingresá el nombre de la otra persona" hidden>
+    <!-- SCREEN 19: Ingresá su nombre (para otra persona) -->
+    <section class="screen" id="screen-19" data-screen="19" aria-label="Ingresá su nombre" hidden>
       <div class="screen-inner">
         <header class="nav-row">
           <span class="handle"><a href="https://www.instagram.com/linaandrada" target="_blank" rel="noopener noreferrer">@linaandrada</a></span>
-          <span class="logo">GDF<span class="logo-accent">borders</span></span>
+          <button type="button" class="logo-home-btn" data-action="request-home" aria-label="Volver al inicio">
+            <img class="logo" src="assets/images/logo2.png" alt="" onerror="this.onerror=null;this.src='assets/images/placeholder.svg'">
+          </button>
         </header>
         <button class="back-link" data-action="go-back">&larr; Atrás</button>
-        <h1 class="title-md">Ingresá el nombre de la otra persona</h1>
-        <p class="subtitle">Puede ser alguien con quien quieras imaginar el futuro.</p>
+        <h1 class="title-md">Ingresá su nombre</h1>
+        <p class="subtitle">Puede ser quien quieras.</p>
         <div class="name-input-wrap">
           <input type="text" id="player-two-name" class="name-input" maxlength="20" placeholder="Dino" autocomplete="off">
         </div>
         <p class="field-error" id="player-two-error" hidden></p>
       </div>
       <div class="button-bar">
-        <button class="btn btn-primary" data-action="confirm-player-two">Continuar</button>
+        <button class="btn btn-primary" data-action="confirm-other-name">Continuar</button>
       </div>
     </section>
 
-    <!-- SCREEN 9: Selección real de persona -->
-    <section class="screen" id="screen-9" data-screen="9" aria-label="Selección de persona" hidden>
-      <div class="screen-inner">
-        <header class="nav-row">
-          <span class="handle"><a href="https://www.instagram.com/linaandrada" target="_blank" rel="noopener noreferrer">@linaandrada</a></span>
-          <span class="logo">GDF<span class="logo-accent">borders</span></span>
-        </header>
-        <button class="back-link" data-action="go-back">&larr; Atrás</button>
-        <h1 class="title-md">¿Por quién querés empezar?</h1>
-        <div class="option-list" role="radiogroup" aria-label="¿Por quién querés empezar?" id="real-target-options">
-          <button type="button" class="option-card option-lina" data-real-target="player-1" role="radio" aria-checked="false">
-            <span class="checkbox" aria-hidden="true"></span>
-            <span class="option-text"><strong class="option-player-name" data-player-id="player-1"></strong></span>
-          </button>
-          <button type="button" class="option-card option-yo" data-real-target="player-2" role="radio" aria-checked="false">
-            <span class="checkbox" aria-hidden="true"></span>
-            <span class="option-text"><strong class="option-player-name" data-player-id="player-2"></strong></span>
-          </button>
-        </div>
-      </div>
-      <div class="button-bar">
-        <button class="btn btn-primary" data-action="confirm-real-target" id="target-continue-btn" disabled>Continuar</button>
-      </div>
-    </section>
-
-    <!-- SCREEN 10: Generación real del desafío -->
+    <!-- SCREEN 10: Generando desafío -->
     <section class="screen" id="screen-10" data-screen="10" aria-label="Generando desafío" hidden>
       <div class="screen-inner">
         <header class="nav-row">
           <span class="handle"><a href="https://www.instagram.com/linaandrada" target="_blank" rel="noopener noreferrer">@linaandrada</a></span>
-          <span class="logo">GDF<span class="logo-accent">borders</span></span>
+          <button type="button" class="logo-home-btn" data-action="request-home" aria-label="Volver al inicio">
+            <img class="logo" src="assets/images/logo2.png" alt="" onerror="this.onerror=null;this.src='assets/images/placeholder.svg'">
+          </button>
         </header>
         <button class="back-link" data-action="go-back">&larr; Atrás</button>
         <h1 class="title-md">Generando desafío…</h1>
@@ -166,12 +180,14 @@
       </div>
     </section>
 
-    <!-- SCREEN 11: Resultado real del desafío -->
+    <!-- SCREEN 11: Tu desafío -->
     <section class="screen" id="screen-11" data-screen="11" aria-label="Tu desafío" hidden>
       <div class="screen-inner">
         <header class="nav-row">
           <span class="handle"><a href="https://www.instagram.com/linaandrada" target="_blank" rel="noopener noreferrer">@linaandrada</a></span>
-          <span class="logo">GDF<span class="logo-accent">borders</span></span>
+          <button type="button" class="logo-home-btn" data-action="request-home" aria-label="Volver al inicio">
+            <img class="logo" src="assets/images/logo2.png" alt="" onerror="this.onerror=null;this.src='assets/images/placeholder.svg'">
+          </button>
         </header>
         <button class="back-link" data-action="go-back">&larr; Atrás</button>
         <h1 class="title-md">Tu desafío</h1>
@@ -191,24 +207,24 @@
       </div>
     </section>
 
-    <!-- SCREEN 12: Escritura de la predicción -->
+    <!-- SCREEN 12: Escribí la predicción -->
     <section class="screen" id="screen-12" data-screen="12" aria-label="Escribe tu predicción" hidden>
       <div class="screen-inner">
         <header class="nav-row">
           <span class="handle"><a href="https://www.instagram.com/linaandrada" target="_blank" rel="noopener noreferrer">@linaandrada</a></span>
-          <span class="logo">GDF<span class="logo-accent">borders</span></span>
+          <button type="button" class="logo-home-btn" data-action="request-home" aria-label="Volver al inicio">
+            <img class="logo" src="assets/images/logo2.png" alt="" onerror="this.onerror=null;this.src='assets/images/placeholder.svg'">
+          </button>
         </header>
         <button class="back-link" data-action="go-back">&larr; Atrás</button>
         <h1 class="title-md">Escribe tu predicción</h1>
         <div class="chip-row" id="write-chip-row"></div>
         <div class="note-card note-card-editable">
           <label class="note-header" for="prediction-input">Predicción</label>
-          <p class="note-guide" aria-hidden="true">En 202__, ____ va a<br>porque __________________<br>________________________.</p>
           <textarea
             id="prediction-input"
             class="note-textarea"
             maxlength="280"
-            placeholder="Escribí tu predicción…"
             rows="6"
           ></textarea>
         </div>
@@ -218,101 +234,276 @@
       </div>
     </section>
 
-    <!-- SCREEN 13: Predicción guardada -->
-    <section class="screen" id="screen-13" data-screen="13" aria-label="Predicción guardada" hidden>
+    <!-- SCREEN 13: Predicción creada -->
+    <section class="screen theme-flat-yo" id="screen-13" data-screen="13" aria-label="Predicción guardada" hidden>
       <div class="screen-inner">
         <header class="nav-row">
           <span class="handle"><a href="https://www.instagram.com/linaandrada" target="_blank" rel="noopener noreferrer">@linaandrada</a></span>
-          <span class="logo">GDF<span class="logo-accent">borders</span></span>
+          <button type="button" class="logo-home-btn" data-action="request-home" aria-label="Volver al inicio">
+            <img class="logo" src="assets/images/logo2.png" alt="" onerror="this.onerror=null;this.src='assets/images/placeholder.svg'">
+          </button>
         </header>
         <p class="prediction-owner" id="prediction-owner-label"></p>
         <p class="quote-block" id="saved-prediction-text"></p>
         <div class="dino-center">
-          <img src="assets/images/dino-pensando.png" alt="Dinosaurio pensando" onerror="this.onerror=null;this.src='assets/images/placeholder.svg'">
+          <img src="assets/images/dino-pensando.png" alt="Dinosaurio subido arriba de un robot, riéndose" onerror="this.onerror=null;this.src='assets/images/placeholder.svg'">
         </div>
       </div>
       <div class="button-bar">
         <p class="share-fallback-msg" id="share-fallback-msg" hidden>Tu navegador no permite compartir imágenes directamente. Podés guardarla y enviarla desde tu galería.</p>
         <button class="btn btn-secondary" data-action="save-prediction-image" id="save-image-btn">Guardar imagen</button>
         <button class="btn btn-secondary" data-action="share-prediction-image" id="share-image-btn">Compartir</button>
-        <button class="btn btn-primary" data-action="after-save-continue" id="after-save-btn">Continuar</button>
+        <button class="btn btn-primary" data-action="continue-to-stage-two" id="after-save-btn">Continuar</button>
       </div>
     </section>
 
-    <!-- SCREEN 14: Confirmación primera predicción -->
-    <section class="screen" id="screen-14" data-screen="14" aria-label="Predicción completada" hidden>
+    <!-- SCREEN 20: Etapa 2 — elección principal -->
+    <section class="screen" id="screen-20" data-screen="20" aria-label="Elegir cómo seguir jugando" hidden>
       <div class="screen-inner">
         <header class="nav-row">
           <span class="handle"><a href="https://www.instagram.com/linaandrada" target="_blank" rel="noopener noreferrer">@linaandrada</a></span>
-          <span class="logo">GDF<span class="logo-accent">borders</span></span>
+          <button type="button" class="logo-home-btn" data-action="request-home" aria-label="Volver al inicio">
+            <img class="logo" src="assets/images/logo2.png" alt="" onerror="this.onerror=null;this.src='assets/images/placeholder.svg'">
+          </button>
         </header>
         <button class="back-link" data-action="go-back">&larr; Atrás</button>
-        <h1 class="title-center">¡Listo!</h1>
-        <p class="center-text">Ya escribiste la primera.<br>Ahora vamos por la segunda.</p>
-        <div class="dino-center">
-          <img src="assets/images/dino-lentes.png" alt="Dinosaurio con lentes de sol, abrigo y un pato en brazos" onerror="this.onerror=null;this.src='assets/images/placeholder.svg'">
+        <h1 class="title-md">¿Cómo querés seguir jugando?</h1>
+        <p class="subtitle">Elegí una propuesta para continuar con esta predicción</p>
+        <div class="option-list" role="radiogroup" aria-label="¿Cómo querés seguir jugando?" id="stage-two-mode-options">
+          <button type="button" class="option-card" data-stage-two-mode="group" role="radio" aria-checked="false">
+            <span class="checkbox" aria-hidden="true"></span>
+            <span class="option-text"><strong>Jugar con otras personas</strong></span>
+          </button>
+          <button type="button" class="option-card" data-stage-two-mode="solo" role="radio" aria-checked="false">
+            <span class="checkbox" aria-hidden="true"></span>
+            <span class="option-text"><strong>Jugar por mi cuenta</strong></span>
+          </button>
         </div>
       </div>
       <div class="button-bar">
-        <button class="btn btn-primary" data-action="start-second-prediction">Continuar</button>
+        <button class="btn btn-primary" data-action="confirm-stage-two-mode" id="stage-two-continue-btn" disabled>Continuar</button>
       </div>
     </section>
 
-    <!-- SCREEN 15: Resumen de las dos predicciones -->
-    <section class="screen" id="screen-15" data-screen="15" aria-label="Resumen de predicciones" hidden>
+    <!-- SCREEN 21: Jugar por mi cuenta -->
+    <section class="screen" id="screen-21" data-screen="21" aria-label="Jugar por mi cuenta" hidden>
       <div class="screen-inner">
         <header class="nav-row">
           <span class="handle"><a href="https://www.instagram.com/linaandrada" target="_blank" rel="noopener noreferrer">@linaandrada</a></span>
-          <span class="logo">GDF<span class="logo-accent">borders</span></span>
+          <button type="button" class="logo-home-btn" data-action="request-home" aria-label="Volver al inicio">
+            <img class="logo" src="assets/images/logo2.png" alt="" onerror="this.onerror=null;this.src='assets/images/placeholder.svg'">
+          </button>
         </header>
         <button class="back-link" data-action="go-back">&larr; Atrás</button>
-        <div class="summary-list" id="summary-list"></div>
+        <h1 class="title-md">Jugar por mi cuenta</h1>
+        <div class="option-list">
+          <button type="button" class="option-card option-yo" data-action="activity-draw-solo">
+            <span class="option-text"><strong>&#127912; Dibujá la predicción</strong><br>Convertí esta predicción en una imagen</span>
+          </button>
+          <button type="button" class="option-card option-lina" data-action="activity-continue-solo">
+            <span class="option-text"><strong>&#9999;&#65039; Continuá la historia</strong><br>Imaginá qué pasó después</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCREEN 22: Dibujá la predicción (individual) -->
+    <section class="screen theme-flat-yo" id="screen-22" data-screen="22" aria-label="Dibujá la predicción" hidden>
+      <div class="screen-inner">
+        <header class="nav-row">
+          <span class="handle"><a href="https://www.instagram.com/linaandrada" target="_blank" rel="noopener noreferrer">@linaandrada</a></span>
+          <button type="button" class="logo-home-btn" data-action="request-home" aria-label="Volver al inicio">
+            <img class="logo" src="assets/images/logo2.png" alt="" onerror="this.onerror=null;this.src='assets/images/placeholder.svg'">
+          </button>
+        </header>
+        <button class="back-link" data-action="go-back">&larr; Atrás</button>
+        <h1 class="title-md">Dibujá la predicción</h1>
+        <div class="prediction-recap">
+          <p class="prediction-recap-label">Tu predicción:</p>
+          <p class="prediction-recap-text" data-prediction-recap></p>
+        </div>
+        <ol class="instruction-list">
+          <li>Elegí el momento que mejor represente esta predicción.</li>
+          <li>No hace falta dibujar todos los detalles. Un boceto alcanza si logra transmitir la escena.</li>
+          <li>Cuando termines, mirá el dibujo e imaginá qué estaba pasando unos segundos antes.</li>
+        </ol>
       </div>
       <div class="button-bar">
-        <button class="btn btn-primary" data-action="goto-transition">Pasar a la siguiente etapa</button>
+        <button class="btn btn-primary" data-action="finish-activity">Finalizar</button>
       </div>
     </section>
 
-    <!-- SCREEN 16: Transición al juego físico -->
-    <section class="screen screen-gradient" id="screen-16" data-screen="16" aria-label="Transición al juego físico" hidden>
+    <!-- SCREEN 23: Continuá la historia (individual) -->
+    <section class="screen theme-flat-lina" id="screen-23" data-screen="23" aria-label="Continuá la historia" hidden>
       <div class="screen-inner">
         <header class="nav-row">
           <span class="handle"><a href="https://www.instagram.com/linaandrada" target="_blank" rel="noopener noreferrer">@linaandrada</a></span>
-          <span class="logo">GDF<span class="logo-accent">borders</span></span>
+          <button type="button" class="logo-home-btn" data-action="request-home" aria-label="Volver al inicio">
+            <img class="logo" src="assets/images/logo2.png" alt="" onerror="this.onerror=null;this.src='assets/images/placeholder.svg'">
+          </button>
         </header>
         <button class="back-link" data-action="go-back">&larr; Atrás</button>
-        <h1 class="title-md">¡Bienvenido a la siguiente etapa!</h1>
-        <p class="subtitle">La experiencia continúa fuera de la pantalla.</p>
-        <p class="body-text">Ahora vas a poder:</p>
-        <ul class="feature-list">
-          <li>Escribir nuevas predicciones en papel.</li>
-          <li>Dibujar e intervenir las consignas.</li>
-          <li>Compartirlas con el grupo.</li>
-          <li>Votar y elegir las predicciones ganadoras.</li>
-        </ul>
+        <h1 class="title-md">Continuá la historia</h1>
+        <div class="prediction-recap">
+          <p class="prediction-recap-label">Tu predicción:</p>
+          <p class="prediction-recap-text" data-prediction-recap></p>
+        </div>
+        <ol class="instruction-list">
+          <li>La predicción ya ocurrió. ¿Qué cambió después de que ocurrió?</li>
+          <li>No busques un final. Pensá en la consecuencia más inesperada.</li>
+        </ol>
+      </div>
+      <div class="button-bar">
+        <button class="btn btn-primary" data-action="finish-activity">Finalizar</button>
+      </div>
+    </section>
+
+    <!-- SCREEN 25: Jugar con otras personas -->
+    <section class="screen theme-flat-yo" id="screen-25" data-screen="25" aria-label="Jugar con otras personas" hidden>
+      <div class="screen-inner">
+        <header class="nav-row">
+          <span class="handle"><a href="https://www.instagram.com/linaandrada" target="_blank" rel="noopener noreferrer">@linaandrada</a></span>
+          <button type="button" class="logo-home-btn" data-action="request-home" aria-label="Volver al inicio">
+            <img class="logo" src="assets/images/logo2.png" alt="" onerror="this.onerror=null;this.src='assets/images/placeholder.svg'">
+          </button>
+        </header>
+        <button class="back-link" data-action="go-back">&larr; Atrás</button>
+        <h1 class="title-md">Jugar con otras personas</h1>
+        <p class="subtitle">Compartila con el grupo</p>
+        <ol class="instruction-list">
+          <li>Leé la predicción en voz alta para que todas las personas la conozcan.</li>
+          <li>No expliques cómo se te ocurrió. Dejá que cada persona imagine el resto de la historia.</li>
+        </ol>
         <div class="dino-center">
-          <img src="assets/images/grupo-mesa.png" alt="El dinosaurio y otros personajes alrededor de una mesa, escribiendo y dibujando" onerror="this.onerror=null;this.src='assets/images/placeholder.svg'">
+          <img src="assets/images/grupo-mesa.png" alt="El dinosaurio mostrándole un dibujo a un alien, que le muestra el suyo" onerror="this.onerror=null;this.src='assets/images/placeholder.svg'">
         </div>
       </div>
       <div class="button-bar">
-        <button class="btn btn-primary" data-action="finish-game">Finalizar</button>
+        <button class="btn btn-primary" data-action="goto-group-selection">Elegir cómo seguir</button>
       </div>
     </section>
 
-    <!-- SCREEN 17: Confirmación final -->
+    <!-- SCREEN 26: Selección grupal -->
+    <section class="screen" id="screen-26" data-screen="26" aria-label="Selección grupal" hidden>
+      <div class="screen-inner">
+        <header class="nav-row">
+          <span class="handle"><a href="https://www.instagram.com/linaandrada" target="_blank" rel="noopener noreferrer">@linaandrada</a></span>
+          <button type="button" class="logo-home-btn" data-action="request-home" aria-label="Volver al inicio">
+            <img class="logo" src="assets/images/logo2.png" alt="" onerror="this.onerror=null;this.src='assets/images/placeholder.svg'">
+          </button>
+        </header>
+        <button class="back-link" data-action="go-back">&larr; Atrás</button>
+        <h1 class="title-md">¿Cómo quieren seguir?</h1>
+        <p class="subtitle">Elegí una propuesta para continuar el juego.</p>
+        <div class="option-list">
+          <button type="button" class="option-card option-lina" data-action="activity-defend">
+            <span class="option-text"><strong>&#128139; Defendé tu historia</strong><br>Convencé al grupo de que esta predicción podría hacerse realidad</span>
+          </button>
+          <button type="button" class="option-card option-lilac" data-action="activity-vote">
+            <span class="option-text"><strong>&#127942; Votá una ganadora</strong><br>Elegí una categoría y voten en conjunto cuál la representa mejor.</span>
+          </button>
+          <button type="button" class="option-card option-yo" data-action="activity-draw-group">
+            <span class="option-text"><strong>&#127912; Dibujá una predicción</strong><br>Interpretá la predicción de otra persona y descubran entre todos a cuál pertenece cada dibujo.</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCREEN 27: Defendé tu historia -->
+    <section class="screen theme-flat-lina" id="screen-27" data-screen="27" aria-label="Defendé tu historia" hidden>
+      <div class="screen-inner">
+        <header class="nav-row">
+          <span class="handle"><a href="https://www.instagram.com/linaandrada" target="_blank" rel="noopener noreferrer">@linaandrada</a></span>
+          <button type="button" class="logo-home-btn" data-action="request-home" aria-label="Volver al inicio">
+            <img class="logo" src="assets/images/logo2.png" alt="" onerror="this.onerror=null;this.src='assets/images/placeholder.svg'">
+          </button>
+        </header>
+        <button class="back-link" data-action="go-back">&larr; Atrás</button>
+        <h1 class="title-md">Defendé tu historia</h1>
+        <div class="prediction-recap">
+          <p class="prediction-recap-label">Tu predicción:</p>
+          <p class="prediction-recap-text" data-prediction-recap></p>
+        </div>
+        <ol class="instruction-list">
+          <li>Tenés un minuto para convencer al resto de que esta predicción es completamente posible.</li>
+          <li>Explicá por qué podría pasar o conectá hechos improbables para hacerla sonar posible.</li>
+          <li>Todo vale, siempre que logres que suene creíble.</li>
+        </ol>
+      </div>
+      <div class="button-bar">
+        <button class="btn btn-primary" data-action="finish-activity">Finalizar</button>
+      </div>
+    </section>
+
+    <!-- SCREEN 28: Votá una ganadora -->
+    <section class="screen theme-flat-lilac" id="screen-28" data-screen="28" aria-label="Votá una ganadora" hidden>
+      <div class="screen-inner">
+        <header class="nav-row">
+          <span class="handle"><a href="https://www.instagram.com/linaandrada" target="_blank" rel="noopener noreferrer">@linaandrada</a></span>
+          <button type="button" class="logo-home-btn" data-action="request-home" aria-label="Volver al inicio">
+            <img class="logo" src="assets/images/logo2.png" alt="" onerror="this.onerror=null;this.src='assets/images/placeholder.svg'">
+          </button>
+        </header>
+        <button class="back-link" data-action="go-back">&larr; Atrás</button>
+        <h1 class="title-md">Votá una ganadora</h1>
+        <div class="prediction-recap">
+          <p class="prediction-recap-label">Tu predicción:</p>
+          <p class="prediction-recap-text" data-prediction-recap></p>
+        </div>
+        <ol class="instruction-list">
+          <li>Antes de empezar, elegí una categoría.<br>Por ejemplo:<br>La más posible<br>La más absurda<br>La más inesperada<br>La que ojalá ocurra.<br>La que menos esperábamos.</li>
+          <li>Cuando todas las predicciones hayan sido compartidas, voten cuál representa mejor esa categoría.</li>
+        </ol>
+      </div>
+      <div class="button-bar">
+        <button class="btn btn-primary" data-action="finish-activity">Finalizar</button>
+      </div>
+    </section>
+
+    <!-- SCREEN 29: Dibujá una predicción (grupal) -->
+    <section class="screen theme-flat-yo" id="screen-29" data-screen="29" aria-label="Dibujá una predicción" hidden>
+      <div class="screen-inner">
+        <header class="nav-row">
+          <span class="handle"><a href="https://www.instagram.com/linaandrada" target="_blank" rel="noopener noreferrer">@linaandrada</a></span>
+          <button type="button" class="logo-home-btn" data-action="request-home" aria-label="Volver al inicio">
+            <img class="logo" src="assets/images/logo2.png" alt="" onerror="this.onerror=null;this.src='assets/images/placeholder.svg'">
+          </button>
+        </header>
+        <button class="back-link" data-action="go-back">&larr; Atrás</button>
+        <h1 class="title-md">Dibujá una predicción</h1>
+        <div class="prediction-recap">
+          <p class="prediction-recap-label">Tu predicción:</p>
+          <p class="prediction-recap-text" data-prediction-recap></p>
+        </div>
+        <ol class="instruction-list">
+          <li>Cada persona escribe su predicción en un papel. Luego los mezclan y reparten al azar.</li>
+          <li>Cada participante dibuja la predicción que le tocó, sin escribir palabras.</li>
+          <li>Cuando todos terminen, mezclen los dibujos.</li>
+          <li>Entre todos, intenten descubrir qué dibujo corresponde a cada predicción.</li>
+        </ol>
+      </div>
+      <div class="button-bar">
+        <button class="btn btn-primary" data-action="finish-activity">Finalizar</button>
+      </div>
+    </section>
+
+    <!-- SCREEN 17: Pantalla final -->
     <section class="screen" id="screen-17" data-screen="17" aria-label="Confirmación final" hidden>
       <div class="screen-inner">
         <header class="nav-row">
           <span class="handle"><a href="https://www.instagram.com/linaandrada" target="_blank" rel="noopener noreferrer">@linaandrada</a></span>
-          <span class="logo">GDF<span class="logo-accent">borders</span></span>
+          <button type="button" class="logo-home-btn" data-action="request-home" aria-label="Volver al inicio">
+            <img class="logo" src="assets/images/logo2.png" alt="" onerror="this.onerror=null;this.src='assets/images/placeholder.svg'">
+          </button>
         </header>
+        <h1 class="title-center">La app propuso. Vos imaginaste.</h1>
         <div class="dino-center">
-          <img src="assets/images/dino-inicio.png" alt="Dinosaurio saludando" onerror="this.onerror=null;this.src='assets/images/placeholder.svg'">
+          <img src="assets/images/dino-chau.png" alt="Dinosaurio saludando con remera de fuego" onerror="this.onerror=null;this.src='assets/images/placeholder.svg'">
         </div>
-        <p class="center-text">Tus predicciones quedaron guardadas en este dispositivo.</p>
+        <p class="center-text">Siempre hay otro futuro por inventar.</p>
       </div>
       <div class="button-bar">
-        <button class="btn btn-primary" data-action="back-to-home">Volver al inicio</button>
+        <button class="btn btn-primary" data-action="create-another-prediction">Crear otra predicción</button>
       </div>
     </section>
 
